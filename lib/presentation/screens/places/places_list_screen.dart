@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/config/theme.dart';
 import '../../../core/constants/app_constants.dart';
@@ -153,7 +154,7 @@ class _PlacesListScreenState extends ConsumerState<PlacesListScreen> {
                         key: Key('place_card_$index'),
                         place: place,
                         onTap: () {
-                          // TODO: Navigate to place detail
+                          context.push('/places/${place.slug}');
                         },
                       );
                     },

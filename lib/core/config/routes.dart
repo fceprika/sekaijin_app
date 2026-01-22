@@ -9,6 +9,7 @@ import '../../presentation/screens/home/home_screen.dart';
 import '../../presentation/screens/main_shell.dart';
 import '../../presentation/screens/news/news_screen.dart';
 import '../../presentation/screens/places/place_create_screen.dart';
+import '../../presentation/screens/places/place_detail_screen.dart';
 import '../../presentation/screens/places/places_list_screen.dart';
 import '../../presentation/screens/profile/profile_screen.dart';
 import '../../presentation/screens/splash/splash_screen.dart';
@@ -22,7 +23,7 @@ class AppRoutes {
   static const String add = '/add';
   static const String news = '/news';
   static const String profile = '/profile';
-  static const String placeDetails = '/place/:id';
+  static const String placeDetails = '/places/:slug';
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -72,6 +73,15 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => RegisterScreen(
           onLoginTap: () => context.go(AppRoutes.login),
         ),
+      ),
+
+      // Place detail route
+      GoRoute(
+        path: AppRoutes.placeDetails,
+        builder: (context, state) {
+          final slug = state.pathParameters['slug']!;
+          return PlaceDetailScreen(slug: slug);
+        },
       ),
 
       // Main app shell with bottom navigation
