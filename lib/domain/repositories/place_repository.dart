@@ -1,5 +1,6 @@
 import '../../core/errors/failures.dart';
 import '../../data/models/api_response.dart';
+import '../../data/models/create_place_request.dart';
 import '../entities/place.dart';
 
 abstract class PlaceRepository {
@@ -15,4 +16,6 @@ abstract class PlaceRepository {
   });
 
   Future<(Failure?, Place?)> getPlaceBySlug(String slug);
+
+  Future<(Failure?, Place?)> createPlace(CreatePlaceRequest request);
 }

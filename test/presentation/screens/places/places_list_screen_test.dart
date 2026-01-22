@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sekaijin_app/core/errors/failures.dart';
 import 'package:sekaijin_app/data/models/api_response.dart';
+import 'package:sekaijin_app/data/models/create_place_request.dart';
 import 'package:sekaijin_app/domain/entities/place.dart';
 import 'package:sekaijin_app/domain/repositories/place_repository.dart';
 import 'package:sekaijin_app/presentation/providers/places_provider.dart';
@@ -205,4 +206,7 @@ class _MockPlaceRepository implements PlaceRepository {
 
   @override
   Future<(Failure?, Place?)> getPlaceBySlug(String slug) async => (null, null);
+
+  @override
+  Future<(Failure?, Place?)> createPlace(CreatePlaceRequest request) async => (null, null);
 }

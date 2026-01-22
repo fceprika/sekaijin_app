@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../../../domain/entities/place.dart';
 import '../../models/api_response.dart';
+import '../../models/create_place_request.dart';
 import '../../models/place_model.dart';
 
 abstract class PlaceRemoteDatasource {
@@ -17,6 +18,8 @@ abstract class PlaceRemoteDatasource {
   });
 
   Future<PlaceModel> getPlaceBySlug(String slug);
+
+  Future<PlaceModel> createPlace(CreatePlaceRequest request);
 }
 
 class PlaceRemoteDatasourceImpl implements PlaceRemoteDatasource {
@@ -69,6 +72,27 @@ class PlaceRemoteDatasourceImpl implements PlaceRemoteDatasource {
   @override
   Future<PlaceModel> getPlaceBySlug(String slug) async {
     final response = await _dio.get('/places/$slug');
+    final data = response.data as Map<String, dynamic>;
+
+    if (data['data'] != null) {
+      return PlaceModel.fromJson(data['data'] as Map<String, dynamic>);
+    }
+
+    return PlaceModel.fromJson(data);
+  }
+
+  @override
+  Future<PlaceModel> createPlace(CreatePlaceRequest request) async {
+    final formData = await request.toFormData();
+
+    final response = await _dio.post(
+      '/places',
+      data: formData,
+      options: Options(
+        contentType: 'multipart/form-data',
+      ),
+    );
+
     final data = response.data as Map<String, dynamic>;
 
     if (data['data'] != null) {

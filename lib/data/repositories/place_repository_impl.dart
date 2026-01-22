@@ -6,6 +6,7 @@ import '../../domain/entities/place.dart';
 import '../../domain/repositories/place_repository.dart';
 import '../datasources/remote/place_remote_datasource.dart';
 import '../models/api_response.dart';
+import '../models/create_place_request.dart';
 
 class PlaceRepositoryImpl implements PlaceRepository {
   final PlaceRemoteDatasource _remoteDatasource;
@@ -87,5 +88,19 @@ class PlaceRepositoryImpl implements PlaceRepository {
     }
 
     return const ServerFailure(message: 'Une erreur inattendue est survenue');
+  }
+
+  @override
+  Future<(Failure?, Place?)> createPlace(CreatePlaceRequest request) async {
+    try {
+      final place = await _remoteDatasource.createPlace(request);
+      return (null, place);
+    } on DioException catch (e) {
+      return (_handleDioError(e), null);
+    } on ServerException catch (e) {
+      return (ServerFailure(message: e.message), null);
+    } catch (e) {
+      return (const ServerFailure(message: 'Une erreur inattendue est survenue'), null);
+    }
   }
 }

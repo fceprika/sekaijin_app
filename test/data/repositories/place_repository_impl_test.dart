@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sekaijin_app/core/errors/failures.dart';
 import 'package:sekaijin_app/data/datasources/remote/place_remote_datasource.dart';
 import 'package:sekaijin_app/data/models/api_response.dart';
+import 'package:sekaijin_app/data/models/create_place_request.dart';
 import 'package:sekaijin_app/data/models/place_model.dart';
 import 'package:sekaijin_app/data/repositories/place_repository_impl.dart';
 import 'package:sekaijin_app/domain/entities/place.dart';
@@ -206,5 +207,10 @@ class _MockPlaceRemoteDatasource implements PlaceRemoteDatasource {
     }
 
     return placeResponse!;
+  }
+
+  @override
+  Future<PlaceModel> createPlace(CreatePlaceRequest request) async {
+    throw UnimplementedError();
   }
 }

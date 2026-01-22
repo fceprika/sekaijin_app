@@ -113,4 +113,70 @@ class Validators {
     }
     return null;
   }
+
+  static String? googleMapsUrl(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Le lien Google Maps est requis';
+    }
+
+    final trimmedValue = value.trim();
+
+    // Check for valid Google Maps URL patterns
+    final validPatterns = [
+      RegExp(r'^https?://(www\.)?google\.[a-z.]+/maps'),
+      RegExp(r'^https?://maps\.google\.[a-z.]+'),
+      RegExp(r'^https?://maps\.app\.goo\.gl/'),
+      RegExp(r'^https?://goo\.gl/maps/'),
+    ];
+
+    final isValid = validPatterns.any((pattern) => pattern.hasMatch(trimmedValue));
+
+    if (!isValid) {
+      return 'Veuillez entrer un lien Google Maps valide';
+    }
+
+    return null;
+  }
+
+  static String? description(String? value, {int minLength = 10}) {
+    if (value == null || value.trim().isEmpty) {
+      return 'La description est requise';
+    }
+
+    if (value.trim().length < minLength) {
+      return 'La description doit contenir au moins $minLength caractères';
+    }
+
+    return null;
+  }
+
+  static String? url(String? value, {String fieldName = 'URL'}) {
+    if (value == null || value.trim().isEmpty) {
+      return null; // Optional URL
+    }
+
+    final urlRegex = RegExp(
+      r'^https?://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?$',
+      caseSensitive: false,
+    );
+
+    if (!urlRegex.hasMatch(value.trim())) {
+      return 'Veuillez entrer une $fieldName valide';
+    }
+
+    return null;
+  }
+
+  static String? positiveNumber(String? value, {String fieldName = 'Ce champ'}) {
+    if (value == null || value.trim().isEmpty) {
+      return null; // Optional
+    }
+
+    final number = int.tryParse(value.trim());
+    if (number == null || number <= 0) {
+      return '$fieldName doit être un nombre positif';
+    }
+
+    return null;
+  }
 }
