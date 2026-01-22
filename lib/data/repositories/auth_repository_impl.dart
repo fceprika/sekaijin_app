@@ -47,6 +47,54 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<(Failure?, User?)> register({
+    required String name,
+    required String email,
+    required String password,
+    required String passwordConfirmation,
+    String? countryResidence,
+    String? interestCountry,
+    required bool terms,
+  }) async {
+    try {
+      final response = await _remoteDatasource.register(
+        name: name,
+        email: email,
+        password: password,
+        passwordConfirmation: passwordConfirmation,
+        countryResidence: countryResidence,
+        interestCountry: interestCountry,
+        terms: terms,
+      );
+
+      if (!response.success || response.token == null) {
+        return (
+          AuthFailure(message: response.message),
+          null,
+        );
+      }
+
+      await _authService.saveToken(response.token!);
+
+      if (response.user != null) {
+        await _authService.saveUser(jsonEncode(response.user!.toJson()));
+      }
+
+      return (null, response.user);
+    } on NetworkException catch (e) {
+      return (NetworkFailure(message: e.message), null);
+    } on AuthException catch (e) {
+      return (AuthFailure(message: e.message), null);
+    } on ValidationException catch (e) {
+      return (ValidationFailure(message: e.message, errors: e.errors), null);
+    } on ServerException catch (e) {
+      return (ServerFailure(message: e.message, statusCode: e.statusCode), null);
+    } catch (e) {
+      return (const ServerFailure(message: 'Une erreur inattendue est survenue'), null);
+    }
+  }
+
+  @override
   Future<(Failure?, void)> logout() async {
     try {
       await _remoteDatasource.logout();

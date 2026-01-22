@@ -106,6 +106,41 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = const AuthUnauthenticated();
   }
 
+  Future<bool> register({
+    required String name,
+    required String email,
+    required String password,
+    required String passwordConfirmation,
+    String? countryResidence,
+    String? interestCountry,
+    required bool terms,
+  }) async {
+    state = const AuthLoading();
+
+    final (failure, user) = await _repository.register(
+      name: name,
+      email: email,
+      password: password,
+      passwordConfirmation: passwordConfirmation,
+      countryResidence: countryResidence,
+      interestCountry: interestCountry,
+      terms: terms,
+    );
+
+    if (failure != null) {
+      state = AuthError(failure.message, failure: failure);
+      return false;
+    }
+
+    if (user != null) {
+      state = AuthAuthenticated(user);
+      return true;
+    }
+
+    state = const AuthError('Erreur lors de l\'inscription');
+    return false;
+  }
+
   void clearError() {
     if (state is AuthError) {
       state = const AuthUnauthenticated();

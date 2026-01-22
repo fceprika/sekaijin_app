@@ -69,4 +69,48 @@ class Validators {
     }
     return null;
   }
+
+  static String? pseudo(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Le pseudo est requis';
+    }
+    if (value.length < 3 || value.length > 255) {
+      return 'Le pseudo doit contenir entre 3 et 255 caractères';
+    }
+    // Alphanumeric with . _ - but not at start or end
+    final pseudoRegex = RegExp(r'^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]$|^[a-zA-Z0-9]$');
+    if (!pseudoRegex.hasMatch(value)) {
+      return 'Caractères autorisés: lettres, chiffres, . _ -';
+    }
+    return null;
+  }
+
+  static String? registerPassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Le mot de passe est requis';
+    }
+    if (value.length < 12) {
+      return 'Le mot de passe doit contenir au moins 12 caractères';
+    }
+    if (!RegExp(r'[A-Z]').hasMatch(value)) {
+      return 'Le mot de passe doit contenir au moins une majuscule';
+    }
+    if (!RegExp(r'[a-z]').hasMatch(value)) {
+      return 'Le mot de passe doit contenir au moins une minuscule';
+    }
+    if (!RegExp(r'[0-9]').hasMatch(value)) {
+      return 'Le mot de passe doit contenir au moins un chiffre';
+    }
+    return null;
+  }
+
+  static String? confirmRegisterPassword(String? value, String password) {
+    if (value == null || value.isEmpty) {
+      return 'Veuillez confirmer votre mot de passe';
+    }
+    if (value != password) {
+      return 'Les mots de passe ne correspondent pas';
+    }
+    return null;
+  }
 }
