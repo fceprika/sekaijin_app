@@ -31,10 +31,10 @@ class AuthFailure extends Failure {
 }
 
 class ValidationFailure extends Failure {
-  final Map<String, String>? fieldErrors;
+  final Map<String, dynamic>? errors;
 
-  const ValidationFailure({required super.message, this.fieldErrors});
+  const ValidationFailure({required super.message, this.errors});
 
   @override
-  List<Object?> get props => [message, fieldErrors];
+  List<Object?> get props => [message, errors];
 }

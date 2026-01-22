@@ -20,7 +20,7 @@ class CacheException implements Exception {
 class NetworkException implements Exception {
   final String message;
 
-  NetworkException({required this.message});
+  NetworkException({this.message = 'Pas de connexion internet'});
 
   @override
   String toString() => 'NetworkException: $message';
@@ -29,7 +29,7 @@ class NetworkException implements Exception {
 class AuthException implements Exception {
   final String message;
 
-  AuthException({required this.message});
+  AuthException({this.message = 'Session expirée'});
 
   @override
   String toString() => 'AuthException: $message';
@@ -37,9 +37,9 @@ class AuthException implements Exception {
 
 class ValidationException implements Exception {
   final String message;
-  final Map<String, String>? fieldErrors;
+  final Map<String, dynamic>? errors;
 
-  ValidationException({required this.message, this.fieldErrors});
+  ValidationException({required this.message, this.errors});
 
   @override
   String toString() => 'ValidationException: $message';
