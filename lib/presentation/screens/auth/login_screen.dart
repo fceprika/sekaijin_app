@@ -7,7 +7,9 @@ import '../../../core/utils/validators.dart';
 import '../../providers/auth_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({super.key});
+  final VoidCallback? onRegisterTap;
+
+  const LoginScreen({super.key, this.onRegisterTap});
 
   @override
   ConsumerState<LoginScreen> createState() => _LoginScreenState();
@@ -189,7 +191,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       TextButton(
                         key: const Key('register_link'),
-                        onPressed: isLoading ? null : () {},
+                        onPressed: isLoading ? null : widget.onRegisterTap,
                         child: const Text(
                           'Créer un compte',
                           style: TextStyle(
