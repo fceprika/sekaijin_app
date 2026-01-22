@@ -40,6 +40,29 @@ class ReviewRepositoryImpl implements ReviewRepository {
   }
 
   @override
+  Future<(Failure?, ApiResponse<List<PlaceReview>>?)> getUserReviews(
+    int userId, {
+    int page = 1,
+    int perPage = 15,
+  }) async {
+    try {
+      final response = await _remoteDatasource.getUserReviews(
+        userId,
+        page: page,
+        perPage: perPage,
+      );
+
+      return (null, response as ApiResponse<List<PlaceReview>>);
+    } on DioException catch (e) {
+      return (_handleDioError(e), null);
+    } on ServerException catch (e) {
+      return (ServerFailure(message: e.message), null);
+    } catch (e) {
+      return (const ServerFailure(message: 'Une erreur inattendue est survenue'), null);
+    }
+  }
+
+  @override
   Future<(Failure?, PlaceReview?)> createReview(
     String placeSlug, {
     required int rating,

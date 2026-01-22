@@ -9,8 +9,10 @@ abstract class PlaceRemoteDatasource {
   Future<ApiResponse<List<PlaceModel>>> getPlaces({
     int? countryId,
     int? cityId,
+    int? userId,
     PlaceCategory? category,
     String? search,
+    String? status,
     String sortBy = 'created_at',
     String sortOrder = 'desc',
     int page = 1,
@@ -31,20 +33,28 @@ class PlaceRemoteDatasourceImpl implements PlaceRemoteDatasource {
   Future<ApiResponse<List<PlaceModel>>> getPlaces({
     int? countryId,
     int? cityId,
+    int? userId,
     PlaceCategory? category,
     String? search,
+    String? status,
     String sortBy = 'created_at',
     String sortOrder = 'desc',
     int page = 1,
     int perPage = 15,
   }) async {
     final queryParams = <String, dynamic>{
-      'status': 'approved',
       'sort_by': sortBy,
       'sort_order': sortOrder,
       'page': page,
       'per_page': perPage,
     };
+
+    // Only add status filter if not fetching by user_id (user wants to see all their places)
+    if (userId != null) {
+      queryParams['user_id'] = userId;
+    } else {
+      queryParams['status'] = status ?? 'approved';
+    }
 
     if (countryId != null) queryParams['country_id'] = countryId;
     if (cityId != null) queryParams['city_id'] = cityId;

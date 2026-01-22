@@ -14,6 +14,8 @@ import '../../presentation/screens/places/place_create_screen.dart';
 import '../../presentation/screens/places/place_detail_screen.dart';
 import '../../presentation/screens/places/places_list_screen.dart';
 import '../../presentation/screens/reviews/review_form_screen.dart';
+import '../../presentation/screens/profile/my_places_list_screen.dart';
+import '../../presentation/screens/profile/my_reviews_list_screen.dart';
 import '../../presentation/screens/profile/profile_screen.dart';
 import '../../presentation/screens/splash/splash_screen.dart';
 
@@ -26,6 +28,8 @@ class AppRoutes {
   static const String add = '/add';
   static const String news = '/news';
   static const String profile = '/profile';
+  static const String myPlaces = '/profile/places';
+  static const String myReviews = '/profile/reviews';
   static const String placeDetails = '/places/:slug';
   static const String reviewForm = '/places/:slug/review';
   static const String articleDetails = '/articles/:slug';
@@ -120,6 +124,18 @@ final routerProvider = Provider<GoRouter>((ref) {
           final slug = state.pathParameters['slug']!;
           return EventDetailScreen(slug: slug);
         },
+      ),
+
+      // My places route
+      GoRoute(
+        path: AppRoutes.myPlaces,
+        builder: (context, state) => const MyPlacesListScreen(),
+      ),
+
+      // My reviews route
+      GoRoute(
+        path: AppRoutes.myReviews,
+        builder: (context, state) => const MyReviewsListScreen(),
       ),
 
       // Main app shell with bottom navigation

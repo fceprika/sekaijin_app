@@ -2,6 +2,24 @@ import '../../domain/entities/place_review.dart';
 import '../../domain/entities/user.dart';
 import 'user_model.dart';
 
+class ReviewPlaceModel extends ReviewPlace {
+  const ReviewPlaceModel({
+    required super.id,
+    required super.title,
+    required super.slug,
+    super.imageUrl,
+  });
+
+  factory ReviewPlaceModel.fromJson(Map<String, dynamic> json) {
+    return ReviewPlaceModel(
+      id: json['id'] as int,
+      title: json['title'] as String? ?? '',
+      slug: json['slug'] as String? ?? '',
+      imageUrl: json['image_url'] as String?,
+    );
+  }
+}
+
 class PlaceReviewModel extends PlaceReview {
   const PlaceReviewModel({
     required super.id,
@@ -13,12 +31,18 @@ class PlaceReviewModel extends PlaceReview {
     required super.createdAt,
     required super.updatedAt,
     super.user,
+    super.place,
   });
 
   factory PlaceReviewModel.fromJson(Map<String, dynamic> json) {
     User? user;
     if (json['user'] != null) {
       user = UserModel.fromJson(json['user'] as Map<String, dynamic>);
+    }
+
+    ReviewPlace? place;
+    if (json['place'] != null) {
+      place = ReviewPlaceModel.fromJson(json['place'] as Map<String, dynamic>);
     }
 
     return PlaceReviewModel(
@@ -35,6 +59,7 @@ class PlaceReviewModel extends PlaceReview {
           ? DateTime.parse(json['updated_at'] as String)
           : DateTime.now(),
       user: user,
+      place: place,
     );
   }
 

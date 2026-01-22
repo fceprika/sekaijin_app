@@ -12,6 +12,12 @@ abstract class ReviewRemoteDatasource {
     String sortOrder = 'desc',
   });
 
+  Future<ApiResponse<List<PlaceReviewModel>>> getUserReviews(
+    int userId, {
+    int page = 1,
+    int perPage = 15,
+  });
+
   Future<PlaceReviewModel> createReview(
     String placeSlug, {
     required int rating,
@@ -50,6 +56,35 @@ class ReviewRemoteDatasourceImpl implements ReviewRemoteDatasource {
 
     final response = await _dio.get(
       '/places/$placeSlug/reviews',
+      queryParameters: queryParams,
+    );
+
+    return ApiResponse.fromJson(
+      response.data as Map<String, dynamic>,
+      (data) {
+        if (data is List) {
+          return data
+              .map((item) => PlaceReviewModel.fromJson(item as Map<String, dynamic>))
+              .toList();
+        }
+        return <PlaceReviewModel>[];
+      },
+    );
+  }
+
+  @override
+  Future<ApiResponse<List<PlaceReviewModel>>> getUserReviews(
+    int userId, {
+    int page = 1,
+    int perPage = 15,
+  }) async {
+    final queryParams = <String, dynamic>{
+      'page': page,
+      'per_page': perPage,
+    };
+
+    final response = await _dio.get(
+      '/users/$userId/reviews',
       queryParameters: queryParams,
     );
 

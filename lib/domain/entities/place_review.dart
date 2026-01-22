@@ -2,6 +2,20 @@ import 'package:equatable/equatable.dart';
 
 import 'user.dart';
 
+class ReviewPlace {
+  final int id;
+  final String title;
+  final String slug;
+  final String? imageUrl;
+
+  const ReviewPlace({
+    required this.id,
+    required this.title,
+    required this.slug,
+    this.imageUrl,
+  });
+}
+
 class PlaceReview extends Equatable {
   final int id;
   final int placeId;
@@ -12,6 +26,7 @@ class PlaceReview extends Equatable {
   final DateTime createdAt;
   final DateTime updatedAt;
   final User? user;
+  final ReviewPlace? place;
 
   const PlaceReview({
     required this.id,
@@ -23,6 +38,7 @@ class PlaceReview extends Equatable {
     required this.createdAt,
     required this.updatedAt,
     this.user,
+    this.place,
   });
 
   @override

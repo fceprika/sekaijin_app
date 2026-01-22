@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/config/theme.dart';
-import '../../providers/auth_provider.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -20,21 +19,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   }
 
   Future<void> _checkAuthAndNavigate() async {
-    await Future.delayed(const Duration(milliseconds: 1500));
+    await Future.delayed(const Duration(seconds: 2));
 
     if (!mounted) return;
 
-    await ref.read(authStateProvider.notifier).checkAuthStatus();
-
-    if (!mounted) return;
-
-    final authState = ref.read(authStateProvider);
-
-    if (authState is AuthAuthenticated) {
-      context.go('/home');
-    } else {
-      context.go('/login');
-    }
+    // Go directly to login - no auth check to avoid blocking
+    context.go('/login');
   }
 
   @override

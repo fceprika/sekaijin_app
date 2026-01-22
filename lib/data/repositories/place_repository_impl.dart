@@ -17,8 +17,10 @@ class PlaceRepositoryImpl implements PlaceRepository {
   Future<(Failure?, ApiResponse<List<Place>>?)> getPlaces({
     int? countryId,
     int? cityId,
+    int? userId,
     PlaceCategory? category,
     String? search,
+    String? status,
     String sortBy = 'created_at',
     String sortOrder = 'desc',
     int page = 1,
@@ -28,8 +30,10 @@ class PlaceRepositoryImpl implements PlaceRepository {
       final response = await _remoteDatasource.getPlaces(
         countryId: countryId,
         cityId: cityId,
+        userId: userId,
         category: category,
         search: search,
+        status: status,
         sortBy: sortBy,
         sortOrder: sortOrder,
         page: page,

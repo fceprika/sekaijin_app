@@ -70,6 +70,29 @@ class _MockReviewRemoteDatasource implements ReviewRemoteDatasource {
     }
   }
 
+  @override
+  Future<ApiResponse<List<PlaceReviewModel>>> getUserReviews(
+    int userId, {
+    int page = 1,
+    int perPage = 15,
+  }) async {
+    if (shouldThrowError) {
+      throw _createDioError(errorStatusCode ?? 500, errorMessage ?? 'Error');
+    }
+    return ApiResponse(
+      success: true,
+      message: 'Success',
+      data: reviews,
+      pagination: const PaginationInfo(
+        currentPage: 1,
+        lastPage: 1,
+        perPage: 15,
+        total: 0,
+        hasMorePages: false,
+      ),
+    );
+  }
+
   DioException _createDioError(int statusCode, String message) {
     return DioException(
       requestOptions: RequestOptions(path: '/test'),

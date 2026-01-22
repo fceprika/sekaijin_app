@@ -6,14 +6,26 @@ class AuthService {
   final FlutterSecureStorage _secureStorage;
 
   AuthService({FlutterSecureStorage? secureStorage})
-      : _secureStorage = secureStorage ?? const FlutterSecureStorage();
+      : _secureStorage = secureStorage ??
+            const FlutterSecureStorage(
+              iOptions: IOSOptions(
+                accessibility: KeychainAccessibility.first_unlock_this_device,
+              ),
+              aOptions: AndroidOptions(
+                encryptedSharedPreferences: true,
+              ),
+            );
 
   Future<void> saveToken(String token) async {
     await _secureStorage.write(key: StorageKeys.accessToken, value: token);
   }
 
   Future<String?> getToken() async {
-    return await _secureStorage.read(key: StorageKeys.accessToken);
+    try {
+      return await _secureStorage.read(key: StorageKeys.accessToken);
+    } catch (_) {
+      return null;
+    }
   }
 
   Future<void> deleteToken() async {
@@ -21,8 +33,12 @@ class AuthService {
   }
 
   Future<bool> isAuthenticated() async {
-    final token = await getToken();
-    return token != null && token.isNotEmpty;
+    try {
+      final token = await getToken();
+      return token != null && token.isNotEmpty;
+    } catch (_) {
+      return false;
+    }
   }
 
   Future<void> saveRefreshToken(String token) async {

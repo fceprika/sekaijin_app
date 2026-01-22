@@ -196,8 +196,10 @@ class _MockPlaceRepository implements PlaceRepository {
   Future<(Failure?, ApiResponse<List<Place>>?)> getPlaces({
     int? countryId,
     int? cityId,
+    int? userId,
     PlaceCategory? category,
     String? search,
+    String? status,
     String sortBy = 'created_at',
     String sortOrder = 'desc',
     int page = 1,

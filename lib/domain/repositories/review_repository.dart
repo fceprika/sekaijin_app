@@ -11,6 +11,12 @@ abstract class ReviewRepository {
     String sortOrder = 'desc',
   });
 
+  Future<(Failure?, ApiResponse<List<PlaceReview>>?)> getUserReviews(
+    int userId, {
+    int page = 1,
+    int perPage = 15,
+  });
+
   Future<(Failure?, PlaceReview?)> createReview(
     String placeSlug, {
     required int rating,

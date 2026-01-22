@@ -153,8 +153,10 @@ class _MockPlaceRemoteDatasource implements PlaceRemoteDatasource {
   Future<ApiResponse<List<PlaceModel>>> getPlaces({
     int? countryId,
     int? cityId,
+    int? userId,
     PlaceCategory? category,
     String? search,
+    String? status,
     String sortBy = 'created_at',
     String sortOrder = 'desc',
     int page = 1,
