@@ -8,6 +8,7 @@ import '../../presentation/screens/auth/register_screen.dart';
 import '../../presentation/screens/home/home_screen.dart';
 import '../../presentation/screens/main_shell.dart';
 import '../../presentation/screens/news/news_screen.dart';
+import '../../presentation/screens/articles/article_detail_screen.dart';
 import '../../presentation/screens/places/place_create_screen.dart';
 import '../../presentation/screens/places/place_detail_screen.dart';
 import '../../presentation/screens/places/places_list_screen.dart';
@@ -26,6 +27,7 @@ class AppRoutes {
   static const String profile = '/profile';
   static const String placeDetails = '/places/:slug';
   static const String reviewForm = '/places/:slug/review';
+  static const String articleDetails = '/articles/:slug';
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -97,6 +99,15 @@ final routerProvider = Provider<GoRouter>((ref) {
             placeName: extra?['placeName'] ?? '',
             existingReview: extra?['existingReview'],
           );
+        },
+      ),
+
+      // Article detail route
+      GoRoute(
+        path: AppRoutes.articleDetails,
+        builder: (context, state) {
+          final slug = state.pathParameters['slug']!;
+          return ArticleDetailScreen(slug: slug);
         },
       ),
 
