@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/config/theme.dart';
 import '../../../domain/entities/place.dart';
+import '../../providers/auth_provider.dart';
 import '../../providers/place_detail_provider.dart';
+import '../../providers/reviews_provider.dart';
 import '../../widgets/common/image_carousel.dart';
 import '../../widgets/common/rating_stars.dart';
 import '../../widgets/reviews/review_card.dart';
@@ -38,21 +41,51 @@ class PlaceDetailScreen extends ConsumerWidget {
   }
 }
 
-class _PlaceDetailContent extends StatefulWidget {
+class _PlaceDetailContent extends ConsumerStatefulWidget {
   final Place place;
 
   const _PlaceDetailContent({required this.place});
 
   @override
-  State<_PlaceDetailContent> createState() => _PlaceDetailContentState();
+  ConsumerState<_PlaceDetailContent> createState() => _PlaceDetailContentState();
 }
 
-class _PlaceDetailContentState extends State<_PlaceDetailContent> {
+class _PlaceDetailContentState extends ConsumerState<_PlaceDetailContent> {
   bool _isDescriptionExpanded = false;
+
+  void _navigateToReviewForm() {
+    final authState = ref.read(authStateProvider);
+    if (authState is! AuthAuthenticated) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Connectez-vous pour donner votre avis'),
+          backgroundColor: AppColors.error,
+        ),
+      );
+      return;
+    }
+
+    final userReview = ref.read(userReviewProvider(widget.place.slug));
+
+    context.push(
+      '/places/${widget.place.slug}/review',
+      extra: {
+        'placeName': widget.place.title,
+        'existingReview': userReview,
+      },
+    ).then((result) {
+      if (result == true) {
+        // Refresh place detail to get updated rating
+        ref.invalidate(placeDetailProvider(widget.place.slug));
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final place = widget.place;
+    final userReview = ref.watch(userReviewProvider(place.slug));
+    final authState = ref.watch(authStateProvider);
 
     return CustomScrollView(
       key: const Key('place_detail_scroll'),
@@ -304,23 +337,75 @@ class _PlaceDetailContentState extends State<_PlaceDetailContent> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _SectionTitle(title: 'Avis (${place.reviewsCount})'),
-                    TextButton.icon(
-                      key: const Key('add_review_button'),
-                      onPressed: () {
-                        // TODO: Navigate to add review screen
-                      },
-                      icon: const Icon(Icons.add, size: 18),
-                      label: const Text('Avis'),
-                    ),
+                    if (authState is AuthAuthenticated)
+                      TextButton.icon(
+                        key: const Key('add_review_button'),
+                        onPressed: _navigateToReviewForm,
+                        icon: Icon(
+                          userReview != null ? Icons.edit : Icons.add,
+                          size: 18,
+                        ),
+                        label: Text(userReview != null ? 'Modifier' : 'Avis'),
+                      ),
                   ],
                 ),
                 const SizedBox(height: 12),
+
+                // User's own review (shown separately at the top)
+                if (userReview != null) ...[
+                  Container(
+                    key: const Key('user_review_section'),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Mon avis',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: _navigateToReviewForm,
+                              child: const Text('Modifier'),
+                            ),
+                          ],
+                        ),
+                        ReviewCard(
+                          review: userReview,
+                          index: 0,
+                          showUser: false,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                ],
+
+                // Other reviews
                 Container(
                   key: const Key('reviews_section'),
                   child: place.reviews != null && place.reviews!.isNotEmpty
                       ? Column(
                           children: [
-                            ...place.reviews!.take(3).toList().asMap().entries.map(
+                            ...place.reviews!
+                                .where((review) => userReview == null || review.id != userReview.id)
+                                .take(3)
+                                .toList()
+                                .asMap()
+                                .entries
+                                .map(
                                   (entry) => Padding(
                                     padding: const EdgeInsets.only(bottom: 12),
                                     child: ReviewCard(
@@ -356,13 +441,19 @@ class _PlaceDetailContentState extends State<_PlaceDetailContent> {
                                   ),
                                 ),
                                 const SizedBox(height: 8),
-                                const Text(
-                                  'Soyez le premier à donner votre avis!',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: AppColors.primary,
+                                if (authState is AuthAuthenticated)
+                                  TextButton(
+                                    onPressed: _navigateToReviewForm,
+                                    child: const Text('Soyez le premier à donner votre avis!'),
+                                  )
+                                else
+                                  const Text(
+                                    'Connectez-vous pour donner votre avis',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: AppColors.primary,
+                                    ),
                                   ),
-                                ),
                               ],
                             ),
                           ),

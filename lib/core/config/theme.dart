@@ -11,6 +11,7 @@ class AppColors {
   static const Color onBackground = Color(0xFF1F2937);
   static const Color onSurface = Color(0xFF1F2937);
   static const Color onError = Color(0xFFFFFFFF);
+  static const Color rating = Color(0xFFFBBF24);
 }
 
 class AppTheme {

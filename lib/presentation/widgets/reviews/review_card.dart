@@ -7,11 +7,13 @@ import '../common/rating_stars.dart';
 class ReviewCard extends StatelessWidget {
   final PlaceReview review;
   final int index;
+  final bool showUser;
 
   const ReviewCard({
     super.key,
     required this.review,
     required this.index,
+    this.showUser = true,
   });
 
   @override
@@ -31,33 +33,36 @@ class ReviewCard extends StatelessWidget {
           Row(
             children: [
               // Avatar
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-                child: Text(
-                  review.user?.name.isNotEmpty == true
-                      ? review.user!.name[0].toUpperCase()
-                      : '?',
-                  style: const TextStyle(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.bold,
+              if (showUser) ...[
+                CircleAvatar(
+                  radius: 20,
+                  backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+                  child: Text(
+                    review.user?.name.isNotEmpty == true
+                        ? review.user!.name[0].toUpperCase()
+                        : '?',
+                    style: const TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 12),
+                const SizedBox(width: 12),
+              ],
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      key: Key('review_user_name_$index'),
-                      review.user?.name ?? 'Utilisateur anonyme',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.onBackground,
+                    if (showUser)
+                      Text(
+                        key: Key('review_user_name_$index'),
+                        review.user?.name ?? 'Utilisateur anonyme',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.onBackground,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 2),
+                    if (showUser) const SizedBox(height: 2),
                     Text(
                       key: Key('review_date_$index'),
                       _formatRelativeTime(review.createdAt),

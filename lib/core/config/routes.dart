@@ -11,6 +11,7 @@ import '../../presentation/screens/news/news_screen.dart';
 import '../../presentation/screens/places/place_create_screen.dart';
 import '../../presentation/screens/places/place_detail_screen.dart';
 import '../../presentation/screens/places/places_list_screen.dart';
+import '../../presentation/screens/reviews/review_form_screen.dart';
 import '../../presentation/screens/profile/profile_screen.dart';
 import '../../presentation/screens/splash/splash_screen.dart';
 
@@ -24,6 +25,7 @@ class AppRoutes {
   static const String news = '/news';
   static const String profile = '/profile';
   static const String placeDetails = '/places/:slug';
+  static const String reviewForm = '/places/:slug/review';
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -81,6 +83,20 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final slug = state.pathParameters['slug']!;
           return PlaceDetailScreen(slug: slug);
+        },
+      ),
+
+      // Review form route
+      GoRoute(
+        path: AppRoutes.reviewForm,
+        builder: (context, state) {
+          final slug = state.pathParameters['slug']!;
+          final extra = state.extra as Map<String, dynamic>?;
+          return ReviewFormScreen(
+            placeSlug: slug,
+            placeName: extra?['placeName'] ?? '',
+            existingReview: extra?['existingReview'],
+          );
         },
       ),
 
