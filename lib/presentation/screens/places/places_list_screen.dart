@@ -7,6 +7,8 @@ import '../../../core/constants/app_constants.dart';
 import '../../providers/places_provider.dart';
 import '../../widgets/cards/place_list_card.dart';
 import '../../widgets/common/empty_state.dart';
+import '../../widgets/common/error_state.dart';
+import '../../widgets/common/loading_shimmer.dart';
 import '../../widgets/filters/category_chips.dart';
 
 class PlacesListScreen extends ConsumerStatefulWidget {
@@ -94,41 +96,41 @@ class _PlacesListScreenState extends ConsumerState<PlacesListScreen> {
             ),
 
             // Results count
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  '${placesState.total} lieux trouvés',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: AppColors.onBackground.withValues(alpha: 0.6),
+            if (!placesState.isLoading || placesState.places.isNotEmpty)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    '${placesState.total} lieux trouvés',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: AppColors.onBackground.withValues(alpha: 0.6),
+                    ),
                   ),
                 ),
               ),
-            ),
 
             // Content
             if (placesState.isLoading && placesState.places.isEmpty)
-              const SliverFillRemaining(
-                child: Center(
-                  child: CircularProgressIndicator(),
+              SliverPadding(
+                padding: const EdgeInsets.all(AppConstants.defaultPadding),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => const PlaceCardShimmer(),
+                    childCount: 3,
+                  ),
                 ),
               )
             else if (placesState.error != null && placesState.places.isEmpty)
               SliverFillRemaining(
-                child: _ErrorState(
+                child: ErrorState(
                   message: placesState.error!,
                   onRetry: () => ref.read(placesProvider.notifier).refresh(),
                 ),
               )
             else if (placesState.places.isEmpty)
-              const SliverFillRemaining(
-                child: EmptyState(
-                  key: Key('empty_places_state'),
-                  icon: Icons.place_outlined,
-                  title: 'Aucun lieu trouvé',
-                  message: 'Essayez de modifier vos filtres pour découvrir plus de lieux.',
-                ),
+              SliverFillRemaining(
+                child: EmptyState.noPlaces(),
               )
             else
               SliverPadding(
@@ -207,46 +209,6 @@ class _SortDropdown extends StatelessWidget {
             ),
           ],
           onChanged: onChanged,
-        ),
-      ),
-    );
-  }
-}
-
-class _ErrorState extends StatelessWidget {
-  final String message;
-  final VoidCallback onRetry;
-
-  const _ErrorState({
-    required this.message,
-    required this.onRetry,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.error_outline,
-              size: 64,
-              color: AppColors.error,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.error),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: onRetry,
-              child: const Text('Réessayer'),
-            ),
-          ],
         ),
       ),
     );

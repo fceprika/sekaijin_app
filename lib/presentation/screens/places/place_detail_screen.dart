@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/config/theme.dart';
+import '../../../core/utils/snackbar_helper.dart';
 import '../../../domain/entities/place.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/place_detail_provider.dart';
 import '../../providers/reviews_provider.dart';
+import '../../widgets/common/error_state.dart';
 import '../../widgets/common/image_carousel.dart';
 import '../../widgets/common/rating_stars.dart';
 import '../../widgets/reviews/review_card.dart';
@@ -28,10 +31,8 @@ class PlaceDetailScreen extends ConsumerWidget {
     return Scaffold(
       key: const Key('place_detail_screen'),
       body: placeAsync.when(
-        loading: () => const Center(
-          child: CircularProgressIndicator(),
-        ),
-        error: (error, _) => _ErrorState(
+        loading: () => const _PlaceDetailShimmer(),
+        error: (error, _) => ErrorState(
           message: error.toString(),
           onRetry: () => ref.invalidate(placeDetailProvider(slug)),
         ),
@@ -56,12 +57,7 @@ class _PlaceDetailContentState extends ConsumerState<_PlaceDetailContent> {
   void _navigateToReviewForm() {
     final authState = ref.read(authStateProvider);
     if (authState is! AuthAuthenticated) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Connectez-vous pour donner votre avis'),
-          backgroundColor: AppColors.error,
-        ),
-      );
+      SnackbarHelper.showWarning(context, 'Connectez-vous pour donner votre avis');
       return;
     }
 
@@ -560,41 +556,143 @@ class _InfoRow extends StatelessWidget {
   }
 }
 
-class _ErrorState extends StatelessWidget {
-  final String message;
-  final VoidCallback onRetry;
-
-  const _ErrorState({
-    required this.message,
-    required this.onRetry,
-  });
+class _PlaceDetailShimmer extends StatelessWidget {
+  const _PlaceDetailShimmer();
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.error_outline,
-              size: 64,
-              color: AppColors.error,
+    return Shimmer.fromColors(
+      baseColor: AppColors.onBackground.withValues(alpha: 0.1),
+      highlightColor: AppColors.onBackground.withValues(alpha: 0.05),
+      child: CustomScrollView(
+        slivers: [
+          // App bar shimmer
+          SliverAppBar(
+            expandedHeight: 250,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                color: Colors.white,
+              ),
             ),
-            const SizedBox(height: 16),
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: AppColors.error),
+          ),
+          // Content shimmer
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Category badge
+                  Container(
+                    width: 120,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Title
+                  Container(
+                    width: double.infinity,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Rating
+                  Container(
+                    width: 180,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // Creator
+                  Container(
+                    width: 150,
+                    height: 16,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  // Section title
+                  Container(
+                    width: 120,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Address lines
+                  Container(
+                    width: double.infinity,
+                    height: 16,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    width: 200,
+                    height: 16,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  // Description section
+                  Container(
+                    width: 120,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    width: double.infinity,
+                    height: 14,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    width: double.infinity,
+                    height: 14,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    width: 250,
+                    height: 14,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: onRetry,
-              child: const Text('Réessayer'),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

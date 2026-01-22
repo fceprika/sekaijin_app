@@ -6,6 +6,9 @@ import '../../../core/config/theme.dart';
 import '../../../domain/entities/event.dart';
 import '../../providers/events_provider.dart';
 import '../../widgets/cards/event_list_card.dart';
+import '../../widgets/common/empty_state.dart';
+import '../../widgets/common/error_state.dart';
+import '../../widgets/common/loading_shimmer.dart';
 
 class EventsListView extends ConsumerWidget {
   const EventsListView({super.key});
@@ -162,150 +165,18 @@ class EventsListView extends ConsumerWidget {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: 5,
-      itemBuilder: (context, index) {
-        return Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Date block placeholder
-              Container(
-                width: 60,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    bottomLeft: Radius.circular(16),
-                  ),
-                ),
-              ),
-              // Content placeholder
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        height: 16,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Container(
-                        width: 150,
-                        height: 12,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Container(
-                            width: 60,
-                            height: 20,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade200,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Container(
-                            width: 50,
-                            height: 20,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade200,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+      itemBuilder: (context, index) => const EventCardShimmer(),
     );
   }
 
   Widget _buildEmptyState(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.event_busy,
-            size: 64,
-            color: AppColors.onBackground.withValues(alpha: 0.4),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Aucun événement à venir',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: AppColors.onBackground.withValues(alpha: 0.6),
-                ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Revenez bientôt pour découvrir de nouveaux événements',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.onBackground.withValues(alpha: 0.4),
-                ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
+    return EmptyState.noEvents();
   }
 
   Widget _buildErrorState(BuildContext context, WidgetRef ref, String error) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.error_outline,
-              size: 64,
-              color: AppColors.error.withValues(alpha: 0.6),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Erreur de chargement',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: AppColors.onBackground,
-                  ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              error,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.onBackground.withValues(alpha: 0.6),
-                  ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () => ref.read(eventsListProvider.notifier).refresh(),
-              child: const Text('Réessayer'),
-            ),
-          ],
-        ),
-      ),
+    return ErrorState(
+      message: error,
+      onRetry: () => ref.read(eventsListProvider.notifier).refresh(),
     );
   }
 }

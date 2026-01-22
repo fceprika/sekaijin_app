@@ -3,11 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/config/theme.dart';
+import '../../../core/utils/snackbar_helper.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/profile_provider.dart';
 import '../../widgets/cards/compact_place_card.dart';
 import '../../widgets/cards/compact_review_card.dart';
 import '../../widgets/cards/stat_card.dart';
+import '../../widgets/common/loading_shimmer.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -34,6 +36,7 @@ class ProfileScreen extends ConsumerWidget {
     if (confirmed == true && context.mounted) {
       await ref.read(authStateProvider.notifier).logout();
       if (context.mounted) {
+        SnackbarHelper.showInfo(context, 'Vous avez été déconnecté');
         context.go('/login');
       }
     }
@@ -123,11 +126,18 @@ class ProfileScreen extends ConsumerWidget {
                   loading: () => const Row(
                     children: [
                       Expanded(
-                        child: Card(
-                          child: Padding(
-                            padding: EdgeInsets.all(24),
-                            child: Center(child: CircularProgressIndicator()),
-                          ),
+                        child: LoadingShimmer(
+                          width: double.infinity,
+                          height: 80,
+                          borderRadius: 12,
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: LoadingShimmer(
+                          width: double.infinity,
+                          height: 80,
+                          borderRadius: 12,
                         ),
                       ),
                     ],
@@ -169,9 +179,11 @@ class ProfileScreen extends ConsumerWidget {
                 onSeeAll: () => context.push('/profile/places'),
               ),
               myPlaces.when(
-                loading: () => const Padding(
-                  padding: EdgeInsets.all(24),
-                  child: Center(child: CircularProgressIndicator()),
+                loading: () => Column(
+                  children: List.generate(
+                    2,
+                    (index) => const CompactCardShimmer(),
+                  ),
                 ),
                 error: (error, _) => Padding(
                   padding: const EdgeInsets.all(16),
@@ -230,9 +242,11 @@ class ProfileScreen extends ConsumerWidget {
                 onSeeAll: () => context.push('/profile/reviews'),
               ),
               myReviews.when(
-                loading: () => const Padding(
-                  padding: EdgeInsets.all(24),
-                  child: Center(child: CircularProgressIndicator()),
+                loading: () => Column(
+                  children: List.generate(
+                    2,
+                    (index) => const CompactCardShimmer(),
+                  ),
                 ),
                 error: (error, _) => Padding(
                   padding: const EdgeInsets.all(16),

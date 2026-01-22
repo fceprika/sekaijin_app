@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/config/theme.dart';
+import '../../../core/utils/snackbar_helper.dart';
 import '../../../domain/entities/place_review.dart';
 import '../../providers/reviews_provider.dart';
 import '../../widgets/dialogs/confirm_dialog.dart';
@@ -98,7 +99,7 @@ class _ReviewFormScreenState extends ConsumerState<ReviewFormScreen> {
       )).notifier,
     );
 
-    // Listen for errors
+    // Listen for errors and success messages
     ref.listen(
       reviewFormProvider((
         placeSlug: widget.placeSlug,
@@ -106,20 +107,10 @@ class _ReviewFormScreenState extends ConsumerState<ReviewFormScreen> {
       )),
       (previous, next) {
         if (next.error != null && previous?.error != next.error) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(next.error!),
-              backgroundColor: AppColors.error,
-            ),
-          );
+          SnackbarHelper.showError(context, next.error!);
         }
         if (next.successMessage != null && previous?.successMessage != next.successMessage) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(next.successMessage!),
-              backgroundColor: AppColors.secondary,
-            ),
-          );
+          SnackbarHelper.showSuccess(context, next.successMessage!);
         }
       },
     );

@@ -6,6 +6,9 @@ import '../../../core/config/theme.dart';
 import '../../../domain/entities/article.dart';
 import '../../providers/articles_provider.dart';
 import '../../widgets/cards/article_list_card.dart';
+import '../../widgets/common/empty_state.dart';
+import '../../widgets/common/error_state.dart';
+import '../../widgets/common/loading_shimmer.dart';
 
 class ArticlesListView extends ConsumerWidget {
   const ArticlesListView({super.key});
@@ -142,152 +145,18 @@ class ArticlesListView extends ConsumerWidget {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: 5,
-      itemBuilder: (context, index) {
-        return Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Image placeholder
-              Container(
-                height: 180,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(16)),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Category placeholder
-                    Container(
-                      width: 80,
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    // Title placeholder
-                    Container(
-                      width: double.infinity,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Container(
-                      width: 200,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    // Summary placeholder
-                    Container(
-                      width: double.infinity,
-                      height: 16,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Container(
-                      width: 250,
-                      height: 16,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+      itemBuilder: (context, index) => const ArticleCardShimmer(),
     );
   }
 
   Widget _buildEmptyState(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.article_outlined,
-            size: 64,
-            color: AppColors.onBackground.withValues(alpha: 0.4),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Aucun article',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: AppColors.onBackground.withValues(alpha: 0.6),
-                ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Il n\'y a pas encore d\'articles dans cette catégorie',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.onBackground.withValues(alpha: 0.4),
-                ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
+    return EmptyState.noArticles();
   }
 
   Widget _buildErrorState(BuildContext context, WidgetRef ref, String error) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.error_outline,
-              size: 64,
-              color: AppColors.error.withValues(alpha: 0.6),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Erreur de chargement',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: AppColors.onBackground,
-                  ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              error,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.onBackground.withValues(alpha: 0.6),
-                  ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () => ref.read(articlesListProvider.notifier).refresh(),
-              child: const Text('Réessayer'),
-            ),
-          ],
-        ),
-      ),
+    return ErrorState(
+      message: error,
+      onRetry: () => ref.read(articlesListProvider.notifier).refresh(),
     );
   }
 }

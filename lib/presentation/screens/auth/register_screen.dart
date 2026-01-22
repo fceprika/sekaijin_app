@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/config/theme.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/countries.dart';
+import '../../../core/utils/snackbar_helper.dart';
 import '../../../core/utils/validators.dart';
 import '../../providers/auth_provider.dart';
 
@@ -44,12 +45,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     if (!_acceptTerms) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Vous devez accepter les conditions d\'utilisation'),
-          backgroundColor: AppColors.error,
-        ),
-      );
+      SnackbarHelper.showWarning(context, 'Vous devez accepter les conditions d\'utilisation');
       return;
     }
 
@@ -71,13 +67,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       if (!success) {
         final authState = ref.read(authStateProvider);
         if (authState is AuthError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(authState.message),
-              backgroundColor: AppColors.error,
-            ),
-          );
+          SnackbarHelper.showError(context, authState.message);
         }
+      } else {
+        SnackbarHelper.showSuccess(context, SnackbarHelper.registerSuccess);
       }
     }
   }

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/config/theme.dart';
+import '../../../core/utils/snackbar_helper.dart';
 import '../../../core/utils/validators.dart';
 import '../../../domain/entities/city.dart';
 import '../../../domain/entities/place.dart';
@@ -46,12 +47,7 @@ class _PlaceCreateScreenState extends ConsumerState<PlaceCreateScreen> {
     final success = await ref.read(createPlaceFormProvider.notifier).submit();
 
     if (success && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Lieu créé avec succès. Il sera visible après validation.'),
-          backgroundColor: AppColors.secondary,
-        ),
-      );
+      SnackbarHelper.showSuccess(context, SnackbarHelper.createPlaceSuccess);
       ref.read(createPlaceFormProvider.notifier).reset();
       _resetForm();
       context.go('/explore');
@@ -78,12 +74,7 @@ class _PlaceCreateScreenState extends ConsumerState<PlaceCreateScreen> {
     // Show error if any
     ref.listen<CreatePlaceFormState>(createPlaceFormProvider, (previous, next) {
       if (next.error != null && previous?.error != next.error) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(next.error!),
-            backgroundColor: AppColors.error,
-          ),
-        );
+        SnackbarHelper.showError(context, next.error!);
       }
     });
 
