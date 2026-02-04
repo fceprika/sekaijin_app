@@ -79,48 +79,51 @@ class NewsCard extends StatelessWidget {
               ),
             ),
             // Content
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Category badge
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: AppColors.secondary.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      data.category,
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.secondary,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Category badge
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: AppColors.secondary.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        data.category,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.secondary,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  // Title
-                  Text(
-                    data.title,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.onBackground,
-                        ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 8),
-                  // Date
-                  Text(
-                    _formatDate(data.date),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppColors.onBackground.withValues(alpha: 0.6),
+                    const SizedBox(height: 4),
+                    // Title
+                    Expanded(
+                      child: Text(
+                        data.title,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.onBackground,
+                            ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  ),
-                ],
+                    // Date
+                    Text(
+                      _formatDate(data.date),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppColors.onBackground.withValues(alpha: 0.6),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
