@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 
-import '../../../core/constants/api_endpoints.dart';
 import '../../../core/errors/exceptions.dart';
 import '../../models/auth_response.dart';
 
@@ -27,7 +26,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   Future<AuthResponse> login(String email, String password) async {
     try {
       final response = await _dio.post(
-        ApiEndpoints.login,
+        '/auth/login',
         data: {
           'email': email,
           'password': password,
@@ -62,7 +61,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   }) async {
     try {
       final response = await _dio.post(
-        ApiEndpoints.register,
+        '/auth/register',
         data: {
           'name': name,
           'email': email,
@@ -93,7 +92,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   @override
   Future<void> logout() async {
     try {
-      await _dio.post(ApiEndpoints.logout);
+      await _dio.post('/auth/logout');
     } on DioException catch (e) {
       if (e.error is Exception) {
         throw e.error as Exception;

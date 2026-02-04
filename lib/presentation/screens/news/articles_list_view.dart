@@ -88,15 +88,15 @@ class ArticlesListView extends ConsumerWidget {
     WidgetRef ref,
     ArticlesState state,
   ) {
-    if (state.isLoading && state.articles.isEmpty) {
+    if (state.isLoading && state.items.isEmpty) {
       return _buildLoadingShimmer();
     }
 
-    if (state.error != null && state.articles.isEmpty) {
+    if (state.error != null && state.items.isEmpty) {
       return _buildErrorState(context, ref, state.error!);
     }
 
-    if (state.articles.isEmpty) {
+    if (state.items.isEmpty) {
       return _buildEmptyState(context);
     }
 
@@ -114,9 +114,9 @@ class ArticlesListView extends ConsumerWidget {
         },
         child: ListView.builder(
           padding: const EdgeInsets.all(16),
-          itemCount: state.articles.length + (state.isLoadingMore ? 1 : 0),
+          itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
           itemBuilder: (context, index) {
-            if (index == state.articles.length) {
+            if (index == state.items.length) {
               return const Center(
                 child: Padding(
                   padding: EdgeInsets.all(16),
@@ -125,7 +125,7 @@ class ArticlesListView extends ConsumerWidget {
               );
             }
 
-            final article = state.articles[index];
+            final article = state.items[index];
             return ArticleListCard(
               key: Key('article_card_$index'),
               article: article,

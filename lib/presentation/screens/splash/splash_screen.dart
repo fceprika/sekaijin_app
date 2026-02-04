@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/config/theme.dart';
+import '../../../core/config/routes.dart';
+import '../../providers/auth_provider.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -12,9 +14,12 @@ class SplashScreen extends ConsumerStatefulWidget {
 }
 
 class _SplashScreenState extends ConsumerState<SplashScreen> {
+  bool _navigated = false;
+
   @override
   void initState() {
     super.initState();
+    _listenToAuthState();
     _checkAuthAndNavigate();
   }
 
@@ -23,8 +28,21 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
     if (!mounted) return;
 
-    // Go directly to login - no auth check to avoid blocking
-    context.go('/login');
+    await ref.read(authStateProvider.notifier).checkAuthStatus();
+  }
+
+  void _listenToAuthState() {
+    ref.listen<AuthState>(authStateProvider, (previous, next) {
+      if (!mounted || _navigated) return;
+
+      if (next is AuthAuthenticated) {
+        _navigated = true;
+        context.go(AppRoutes.home);
+      } else if (next is AuthUnauthenticated || next is AuthError) {
+        _navigated = true;
+        context.go(AppRoutes.login);
+      }
+    });
   }
 
   @override

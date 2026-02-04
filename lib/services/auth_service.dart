@@ -1,9 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../core/constants/storage_keys.dart';
 
+enum AuthEvent {
+  loggedOut,
+}
+
 class AuthService {
   final FlutterSecureStorage _secureStorage;
+  final StreamController<AuthEvent> _events = StreamController<AuthEvent>.broadcast();
 
   AuthService({FlutterSecureStorage? secureStorage})
       : _secureStorage = secureStorage ??
@@ -15,6 +22,8 @@ class AuthService {
                 encryptedSharedPreferences: true,
               ),
             );
+
+  Stream<AuthEvent> get events => _events.stream;
 
   Future<void> saveToken(String token) async {
     await _secureStorage.write(key: StorageKeys.accessToken, value: token);
@@ -30,6 +39,7 @@ class AuthService {
 
   Future<void> deleteToken() async {
     await _secureStorage.delete(key: StorageKeys.accessToken);
+    _events.add(AuthEvent.loggedOut);
   }
 
   Future<bool> isAuthenticated() async {
@@ -59,5 +69,6 @@ class AuthService {
 
   Future<void> clearAll() async {
     await _secureStorage.deleteAll();
+    _events.add(AuthEvent.loggedOut);
   }
 }

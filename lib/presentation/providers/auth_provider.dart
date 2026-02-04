@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/errors/failures.dart';
@@ -62,8 +64,16 @@ class AuthError extends AuthState {
 // Auth Notifier
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository _repository;
+  final AuthService _authService;
+  late final StreamSubscription<AuthEvent> _authSubscription;
 
-  AuthNotifier(this._repository) : super(const AuthInitial());
+  AuthNotifier(this._repository, this._authService) : super(const AuthInitial()) {
+    _authSubscription = _authService.events.listen((event) {
+      if (event == AuthEvent.loggedOut) {
+        state = const AuthUnauthenticated();
+      }
+    });
+  }
 
   Future<void> checkAuthStatus() async {
     state = const AuthLoading();
@@ -103,6 +113,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> logout() async {
     state = const AuthLoading();
     await _repository.logout();
+    state = const AuthUnauthenticated();
+  }
+
+  Future<void> forceLogout() async {
+    await _authService.clearAll();
     state = const AuthUnauthenticated();
   }
 
@@ -146,10 +161,17 @@ class AuthNotifier extends StateNotifier<AuthState> {
       state = const AuthUnauthenticated();
     }
   }
+
+  @override
+  void dispose() {
+    _authSubscription.cancel();
+    super.dispose();
+  }
 }
 
 // Auth State Provider
 final authStateProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final repository = ref.watch(authRepositoryProvider);
-  return AuthNotifier(repository);
+  final authService = ref.watch(authServiceProvider);
+  return AuthNotifier(repository, authService);
 });

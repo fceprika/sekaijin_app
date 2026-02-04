@@ -1,8 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../domain/entities/place.dart';
+import '../../domain/entities/article.dart';
 import '../widgets/cards/news_card.dart';
 import '../widgets/cards/place_card.dart';
+import 'articles_provider.dart';
+import 'places_provider.dart';
 
 class HomeData {
   final List<NewsCardData> latestNews;
@@ -15,89 +21,84 @@ class HomeData {
 }
 
 final homeDataProvider = FutureProvider.autoDispose<HomeData>((ref) async {
-  // Simulate network delay
-  await Future.delayed(const Duration(milliseconds: 800));
+  final link = ref.keepAlive();
+  Timer? timer;
+  timer = Timer(const Duration(minutes: 10), link.close);
+  ref.onDispose(() => timer?.cancel());
 
-  // Mock data for development
-  final latestNews = [
-    NewsCardData(
-      id: '1',
-      title: 'Les meilleurs temples à visiter à Kyoto cette saison',
-      category: 'Culture',
-      imageUrl: 'https://example.com/kyoto.jpg',
-      date: DateTime.now().subtract(const Duration(hours: 2)),
-    ),
-    NewsCardData(
-      id: '2',
-      title: 'Guide complet de la street food à Bangkok',
-      category: 'Gastronomie',
-      imageUrl: 'https://example.com/bangkok.jpg',
-      date: DateTime.now().subtract(const Duration(days: 1)),
-    ),
-    NewsCardData(
-      id: '3',
-      title: 'Découverte des rizières en terrasses du Vietnam',
-      category: 'Nature',
-      imageUrl: 'https://example.com/vietnam.jpg',
-      date: DateTime.now().subtract(const Duration(days: 2)),
-    ),
-    NewsCardData(
-      id: '4',
-      title: 'Festival des lanternes: dates et lieux 2024',
-      category: 'Événement',
-      imageUrl: 'https://example.com/lantern.jpg',
-      date: DateTime.now().subtract(const Duration(days: 3)),
-    ),
-    NewsCardData(
-      id: '5',
-      title: 'Les secrets de la Grande Muraille de Chine',
-      category: 'Histoire',
-      imageUrl: 'https://example.com/wall.jpg',
-      date: DateTime.now().subtract(const Duration(days: 5)),
-    ),
-  ];
+  final articlesRepository = ref.watch(articleRepositoryProvider);
+  final placesRepository = ref.watch(placeRepositoryProvider);
 
-  final popularPlaces = [
-    const PlaceCardData(
-      id: '1',
-      title: 'Temple Sensoji',
-      category: 'Temple',
-      location: 'Tokyo, Japon',
-      imageUrl: 'https://example.com/sensoji.jpg',
-      rating: 4.8,
-      categoryIcon: Icons.temple_buddhist,
-    ),
-    const PlaceCardData(
-      id: '2',
-      title: 'Marché flottant',
-      category: 'Marché',
-      location: 'Bangkok, Thaïlande',
-      imageUrl: 'https://example.com/market.jpg',
-      rating: 4.5,
-      categoryIcon: Icons.store,
-    ),
-    const PlaceCardData(
-      id: '3',
-      title: 'Baie d\'Ha Long',
-      category: 'Nature',
-      location: 'Quang Ninh, Vietnam',
-      imageUrl: 'https://example.com/halong.jpg',
-      rating: 4.9,
-      categoryIcon: Icons.landscape,
-    ),
-    const PlaceCardData(
-      id: '4',
-      title: 'Cité Interdite',
-      category: 'Monument',
-      location: 'Pékin, Chine',
-      imageUrl: 'https://example.com/forbidden.jpg',
-      rating: 4.7,
-      categoryIcon: Icons.account_balance,
-    ),
-  ];
+  final results = await Future.wait([
+    articlesRepository.getArticles(page: 1, perPage: 5),
+    placesRepository.getPlaces(page: 1, perPage: 4),
+  ]);
+
+  final (articlesFailure, articlesResponse) = results[0];
+  final (placesFailure, placesResponse) = results[1];
+
+  if (articlesFailure != null && placesFailure != null) {
+    throw Exception('Impossible de charger les données d\'accueil');
+  }
+
+  final latestNews = (articlesResponse?.data ?? [])
+      .map(_mapArticleToNewsCard)
+      .toList();
+
+  final popularPlaces = (placesResponse?.data ?? [])
+      .map(_mapPlaceToCard)
+      .toList();
 
   return HomeData(
     latestNews: latestNews,
     popularPlaces: popularPlaces,
   );
 });
+
+NewsCardData _mapArticleToNewsCard(Article article) {
+  return NewsCardData(
+    id: article.id.toString(),
+    title: article.title,
+    category: article.categoryLabel,
+    imageUrl: article.fullImageUrl ?? '',
+    date: article.publishedAt ?? article.createdAt,
+  );
+}
+
+PlaceCardData _mapPlaceToCard(Place place) {
+  final locationParts = <String>[];
+  if (place.city?.name.isNotEmpty == true) {
+    locationParts.add(place.city!.name);
+  }
+  if (place.city?.country?.nameFr.isNotEmpty == true) {
+    locationParts.add(place.city!.country!.nameFr);
+  }
+  final location = locationParts.isEmpty ? (place.address ?? '') : locationParts.join(', ');
+
+  final imageUrl = place.imageUrls.isNotEmpty ? place.imageUrls.first : '';
+
+  return PlaceCardData(
+    id: place.id.toString(),
+    title: place.title,
+    category: place.category.label,
+    location: location,
+    imageUrl: imageUrl,
+    rating: place.ratingAverage,
+    categoryIcon: _categoryIcon(place.category),
+  );
+}
+
+IconData _categoryIcon(PlaceCategory category) {
+  switch (category) {
+    case PlaceCategory.locationScooters:
+      return Icons.electric_scooter;
+    case PlaceCategory.espacesTravail:
+      return Icons.work_outline;
+    case PlaceCategory.centresSportifs:
+      return Icons.fitness_center;
+    case PlaceCategory.restaurants:
+      return Icons.restaurant;
+    case PlaceCategory.spaMassage:
+      return Icons.spa;
+  }
+}

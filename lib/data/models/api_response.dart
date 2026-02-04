@@ -53,13 +53,20 @@ class PaginationInfo {
   });
 
   factory PaginationInfo.fromJson(Map<String, dynamic> json) {
-    final currentPage = json['current_page'] as int? ?? 1;
-    final lastPage = json['last_page'] as int? ?? 1;
+    int parseInt(dynamic value, int fallback) {
+      if (value is int) return value;
+      if (value is double) return value.toInt();
+      if (value is String) return int.tryParse(value) ?? fallback;
+      return fallback;
+    }
+
+    final currentPage = parseInt(json['current_page'], 1);
+    final lastPage = parseInt(json['last_page'], 1);
 
     return PaginationInfo(
       currentPage: currentPage,
-      perPage: json['per_page'] as int? ?? 15,
-      total: json['total'] as int? ?? 0,
+      perPage: parseInt(json['per_page'], 15),
+      total: parseInt(json['total'], 0),
       lastPage: lastPage,
       hasMorePages: currentPage < lastPage,
     );

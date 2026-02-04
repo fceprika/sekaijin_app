@@ -107,15 +107,15 @@ class EventsListView extends ConsumerWidget {
     WidgetRef ref,
     EventsState state,
   ) {
-    if (state.isLoading && state.events.isEmpty) {
+    if (state.isLoading && state.items.isEmpty) {
       return _buildLoadingShimmer();
     }
 
-    if (state.error != null && state.events.isEmpty) {
+    if (state.error != null && state.items.isEmpty) {
       return _buildErrorState(context, ref, state.error!);
     }
 
-    if (state.events.isEmpty) {
+    if (state.items.isEmpty) {
       return _buildEmptyState(context);
     }
 
@@ -133,9 +133,9 @@ class EventsListView extends ConsumerWidget {
         },
         child: ListView.builder(
           padding: const EdgeInsets.all(16),
-          itemCount: state.events.length + (state.isLoadingMore ? 1 : 0),
+          itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
           itemBuilder: (context, index) {
-            if (index == state.events.length) {
+            if (index == state.items.length) {
               return const Center(
                 child: Padding(
                   padding: EdgeInsets.all(16),
@@ -144,7 +144,7 @@ class EventsListView extends ConsumerWidget {
               );
             }
 
-            final event = state.events[index];
+            final event = state.items[index];
             return EventListCard(
               key: Key('event_card_$index'),
               event: event,

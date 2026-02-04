@@ -96,7 +96,7 @@ class _PlacesListScreenState extends ConsumerState<PlacesListScreen> {
             ),
 
             // Results count
-            if (!placesState.isLoading || placesState.places.isNotEmpty)
+            if (!placesState.isLoading || placesState.items.isNotEmpty)
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -111,7 +111,7 @@ class _PlacesListScreenState extends ConsumerState<PlacesListScreen> {
               ),
 
             // Content
-            if (placesState.isLoading && placesState.places.isEmpty)
+            if (placesState.isLoading && placesState.items.isEmpty)
               SliverPadding(
                 padding: const EdgeInsets.all(AppConstants.defaultPadding),
                 sliver: SliverList(
@@ -121,14 +121,14 @@ class _PlacesListScreenState extends ConsumerState<PlacesListScreen> {
                   ),
                 ),
               )
-            else if (placesState.error != null && placesState.places.isEmpty)
+            else if (placesState.error != null && placesState.items.isEmpty)
               SliverFillRemaining(
                 child: ErrorState(
                   message: placesState.error!,
                   onRetry: () => ref.read(placesProvider.notifier).refresh(),
                 ),
               )
-            else if (placesState.places.isEmpty)
+            else if (placesState.items.isEmpty)
               SliverFillRemaining(
                 child: EmptyState.noPlaces(),
               )
@@ -139,7 +139,7 @@ class _PlacesListScreenState extends ConsumerState<PlacesListScreen> {
                   key: const Key('places_list'),
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      if (index == placesState.places.length) {
+                      if (index == placesState.items.length) {
                         if (placesState.isLoadingMore) {
                           return const Padding(
                             padding: EdgeInsets.all(16),
@@ -151,7 +151,7 @@ class _PlacesListScreenState extends ConsumerState<PlacesListScreen> {
                         return const SizedBox.shrink();
                       }
 
-                      final place = placesState.places[index];
+                      final place = placesState.items[index];
                       return PlaceListCard(
                         key: Key('place_card_$index'),
                         place: place,
@@ -160,7 +160,7 @@ class _PlacesListScreenState extends ConsumerState<PlacesListScreen> {
                         },
                       );
                     },
-                    childCount: placesState.places.length +
+                    childCount: placesState.items.length +
                         (placesState.hasMore ? 1 : 0),
                   ),
                 ),

@@ -5,6 +5,7 @@ import 'auth_service.dart';
 import 'interceptors/auth_interceptor.dart';
 import 'interceptors/error_interceptor.dart';
 import 'interceptors/logging_interceptor.dart';
+import 'interceptors/retry_interceptor.dart';
 
 class ApiService {
   late final Dio _dio;
@@ -24,6 +25,7 @@ class ApiService {
     );
 
     _dio.interceptors.addAll([
+      RetryInterceptor(_dio),
       AuthInterceptor(_authService),
       LoggingInterceptor(),
       ErrorInterceptor(),
