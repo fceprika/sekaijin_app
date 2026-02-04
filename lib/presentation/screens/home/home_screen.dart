@@ -18,6 +18,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateProvider);
     final homeDataAsync = ref.watch(homeDataProvider);
+    final scheme = Theme.of(context).colorScheme;
 
     String username = 'Utilisateur';
     if (authState is AuthAuthenticated) {
@@ -39,17 +40,37 @@ class HomeScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Welcome section
-                _WelcomeSection(key: const Key('welcome_section'), username: username),
-                const SizedBox(height: 24),
-
-                // Search bar
-                const _SearchBar(key: Key('search_bar')),
-                const SizedBox(height: 24),
-
-                // Country selector
+                // Hero section
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    gradient: AppGradients.hero,
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: AppColors.outline),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _WelcomeSection(
+                        key: const Key('welcome_section'),
+                        username: username,
+                      ),
+                      const SizedBox(height: 16),
+                      const _SearchBar(key: Key('search_bar')),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'Pays en focus',
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: scheme.onSurface,
+                      ),
+                ),
+                const SizedBox(height: 12),
                 const CountrySelector(),
-                const SizedBox(height: 32),
+                const SizedBox(height: 28),
 
                 // News section
                 homeDataAsync.when(
@@ -94,6 +115,9 @@ class _WelcomeSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Row(
       children: [
         Expanded(
@@ -102,27 +126,38 @@ class _WelcomeSection extends StatelessWidget {
             children: [
               Text(
                 'Bienvenue,',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: AppColors.onBackground.withValues(alpha: 0.7),
-                    ),
+                style: textTheme.bodyMedium?.copyWith(
+                  color: scheme.onSurfaceVariant,
+                ),
               ),
               Text(
-                '$username!',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.onBackground,
-                    ),
+                username.isEmpty ? 'Explorateur!' : '$username!',
+                style: textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: scheme.onSurface,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Découvrez des lieux, événements et récits qui font voyager.',
+                style: textTheme.bodySmall?.copyWith(
+                  color: scheme.onSurfaceVariant,
+                ),
               ),
             ],
           ),
         ),
-        CircleAvatar(
-          radius: 28,
-          backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-          child: const Icon(
-            Icons.person,
-            size: 28,
-            color: AppColors.primary,
+        Container(
+          width: 56,
+          height: 56,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: AppGradients.accent,
+          ),
+          child: Icon(
+            Icons.travel_explore,
+            size: 26,
+            color: scheme.onPrimary,
           ),
         ),
       ],
@@ -135,15 +170,17 @@ class _SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return TextField(
       enabled: false,
       decoration: InputDecoration(
         hintText: 'Rechercher...',
-        prefixIcon: const Icon(Icons.search),
+        prefixIcon: Icon(Icons.search, color: scheme.onSurfaceVariant),
         filled: true,
         fillColor: AppColors.surface,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -206,14 +243,14 @@ class _NewsLoadingSection extends StatelessWidget {
             itemCount: 3,
             itemBuilder: (context, index) {
               return Shimmer.fromColors(
-                baseColor: AppColors.onBackground.withValues(alpha: 0.1),
-                highlightColor: AppColors.onBackground.withValues(alpha: 0.05),
+                baseColor: AppColors.surfaceVariant,
+                highlightColor: AppColors.surfaceAlt,
                 child: Container(
                   width: 280,
                   margin: const EdgeInsets.only(right: 16),
                   decoration: BoxDecoration(
                     color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(20),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -222,7 +259,7 @@ class _NewsLoadingSection extends StatelessWidget {
                         height: 140,
                         decoration: const BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                         ),
                       ),
                       Padding(
@@ -324,13 +361,13 @@ class _PlacesLoadingSection extends StatelessWidget {
           ),
           itemCount: 4,
           itemBuilder: (context, index) {
-            return Shimmer.fromColors(
-              baseColor: AppColors.onBackground.withValues(alpha: 0.1),
-              highlightColor: AppColors.onBackground.withValues(alpha: 0.05),
+              return Shimmer.fromColors(
+              baseColor: AppColors.surfaceVariant,
+              highlightColor: AppColors.surfaceAlt,
               child: Container(
                 decoration: BoxDecoration(
                   color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -340,7 +377,7 @@ class _PlacesLoadingSection extends StatelessWidget {
                       child: Container(
                         decoration: const BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                         ),
                       ),
                     ),
@@ -403,24 +440,26 @@ class _ErrorSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppColors.error.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
+        color: AppColors.error.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
         children: [
-          const Icon(
+          Icon(
             Icons.error_outline,
-            color: AppColors.error,
+            color: scheme.error,
             size: 48,
           ),
           const SizedBox(height: 16),
           Text(
             message,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: AppColors.error),
+            style: TextStyle(color: scheme.error),
           ),
           const SizedBox(height: 16),
           ElevatedButton(

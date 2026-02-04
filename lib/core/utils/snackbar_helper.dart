@@ -7,7 +7,7 @@ class SnackbarHelper {
     _show(
       context,
       message: message,
-      backgroundColor: AppColors.secondary,
+      backgroundColor: AppColors.success,
       icon: Icons.check_circle,
     );
   }
@@ -32,7 +32,7 @@ class SnackbarHelper {
     _show(
       context,
       message: message,
-      backgroundColor: AppColors.primary,
+      backgroundColor: AppColors.info,
       icon: Icons.info,
     );
   }
@@ -41,7 +41,7 @@ class SnackbarHelper {
     _show(
       context,
       message: message,
-      backgroundColor: AppColors.rating,
+      backgroundColor: AppColors.warning,
       icon: Icons.warning,
     );
   }

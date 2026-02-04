@@ -34,17 +34,21 @@ class PlaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.outline),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+              color: AppColors.shadow,
+              blurRadius: 18,
+              offset: const Offset(0, 8),
             ),
           ],
         ),
@@ -55,15 +59,15 @@ class PlaceCard extends StatelessWidget {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
                   child: Container(
                     height: 100,
                     width: double.infinity,
-                    color: AppColors.primary.withValues(alpha: 0.1),
-                    child: const Icon(
+                    decoration: const BoxDecoration(gradient: AppGradients.hero),
+                    child: Icon(
                       Icons.place,
                       size: 40,
-                      color: AppColors.primary,
+                      color: scheme.primary,
                     ),
                   ),
                 ),
@@ -74,19 +78,21 @@ class PlaceCard extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: AppColors.outline),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1),
-                          blurRadius: 4,
+                          color: AppColors.shadow,
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
                         ),
                       ],
                     ),
                     child: Icon(
                       data.categoryIcon,
                       size: 16,
-                      color: AppColors.primary,
+                      color: scheme.primary,
                     ),
                   ),
                 ),
@@ -101,10 +107,10 @@ class PlaceCard extends StatelessWidget {
                   // Title
                   Text(
                     data.title,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.onBackground,
-                        ),
+                    style: textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: scheme.onSurface,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -115,7 +121,7 @@ class PlaceCard extends StatelessWidget {
                       Icon(
                         Icons.location_on,
                         size: 12,
-                        color: AppColors.onBackground.withValues(alpha: 0.6),
+                        color: scheme.onSurfaceVariant,
                       ),
                       const SizedBox(width: 4),
                       Expanded(
@@ -123,7 +129,7 @@ class PlaceCard extends StatelessWidget {
                           data.location,
                           style: TextStyle(
                             fontSize: 12,
-                            color: AppColors.onBackground.withValues(alpha: 0.6),
+                            color: scheme.onSurfaceVariant,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -138,20 +144,19 @@ class PlaceCard extends StatelessWidget {
                       ...List.generate(5, (index) {
                         final starValue = index + 1;
                         if (data.rating >= starValue) {
-                          return const Icon(Icons.star, size: 14, color: Colors.amber);
+                          return const Icon(Icons.star, size: 14, color: AppColors.rating);
                         } else if (data.rating >= starValue - 0.5) {
-                          return const Icon(Icons.star_half, size: 14, color: Colors.amber);
+                          return const Icon(Icons.star_half, size: 14, color: AppColors.rating);
                         } else {
-                          return Icon(Icons.star_border, size: 14, color: Colors.amber.shade200);
+                          return Icon(Icons.star_border, size: 14, color: AppColors.rating.withValues(alpha: 0.4));
                         }
                       }),
                       const SizedBox(width: 4),
                       Text(
                         data.rating.toStringAsFixed(1),
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.onBackground,
+                        style: textTheme.labelMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: scheme.onSurface,
                         ),
                       ),
                     ],

@@ -79,255 +79,277 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
     final isLoading = authState is AuthLoading || _isSubmitting;
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.onBackground),
+          icon: Icon(Icons.arrow_back, color: scheme.onSurface),
           onPressed: widget.onLoginTap,
         ),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(AppConstants.defaultPadding),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Title
-                Text(
-                  'Créer un compte',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.onBackground,
-                      ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Rejoignez la communauté Sekaijin',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.onBackground.withValues(alpha: 0.7),
-                      ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 32),
-
-                // Pseudo field
-                TextFormField(
-                  key: const Key('pseudo_field'),
-                  controller: _pseudoController,
-                  enabled: !isLoading,
-                  decoration: const InputDecoration(
-                    labelText: 'Pseudo',
-                    hintText: 'Votre pseudo unique',
-                    prefixIcon: Icon(Icons.person_outlined),
+      body: Container(
+        decoration: const BoxDecoration(gradient: AppGradients.hero),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(AppConstants.defaultPadding),
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: AppColors.outline),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.shadow,
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
                   ),
-                  validator: Validators.pseudo,
-                ),
-                const SizedBox(height: 16),
-
-                // Email field
-                TextFormField(
-                  key: const Key('email_field'),
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  autocorrect: false,
-                  enabled: !isLoading,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    hintText: 'votre@email.com',
-                    prefixIcon: Icon(Icons.email_outlined),
-                  ),
-                  validator: Validators.email,
-                ),
-                const SizedBox(height: 16),
-
-                // Password field
-                TextFormField(
-                  key: const Key('password_field'),
-                  controller: _passwordController,
-                  obscureText: _obscurePassword,
-                  enabled: !isLoading,
-                  decoration: InputDecoration(
-                    labelText: 'Mot de passe',
-                    prefixIcon: const Icon(Icons.lock_outlined),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
-                      ),
-                      onPressed: () {
-                        setState(() => _obscurePassword = !_obscurePassword);
-                      },
-                    ),
-                  ),
-                  validator: Validators.registerPassword,
-                ),
-                const SizedBox(height: 8),
-                _buildPasswordHints(),
-                const SizedBox(height: 16),
-
-                // Confirm password field
-                TextFormField(
-                  key: const Key('password_confirm_field'),
-                  controller: _passwordConfirmController,
-                  obscureText: _obscurePasswordConfirm,
-                  enabled: !isLoading,
-                  decoration: InputDecoration(
-                    labelText: 'Confirmer le mot de passe',
-                    prefixIcon: const Icon(Icons.lock_outlined),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePasswordConfirm
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
-                      ),
-                      onPressed: () {
-                        setState(() =>
-                            _obscurePasswordConfirm = !_obscurePasswordConfirm);
-                      },
-                    ),
-                  ),
-                  validator: (value) => Validators.confirmRegisterPassword(
-                    value,
-                    _passwordController.text,
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Country of residence dropdown
-                _buildCountryDropdown(
-                  key: const Key('country_residence_dropdown'),
-                  label: 'Pays de résidence (optionnel)',
-                  value: _selectedCountryResidence,
-                  onChanged: isLoading
-                      ? null
-                      : (value) {
-                          setState(() => _selectedCountryResidence = value);
-                        },
-                ),
-                const SizedBox(height: 16),
-
-                // Country of interest dropdown
-                _buildCountryDropdown(
-                  key: const Key('interest_country_dropdown'),
-                  label: 'Pays qui vous intéresse (optionnel)',
-                  value: _selectedInterestCountry,
-                  onChanged: isLoading
-                      ? null
-                      : (value) {
-                          setState(() => _selectedInterestCountry = value);
-                        },
-                ),
-                const SizedBox(height: 16),
-
-                // Terms checkbox
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                ],
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Checkbox(
-                      key: const Key('terms_checkbox'),
-                      value: _acceptTerms,
+                    // Title
+                    Text(
+                      'Créer un compte',
+                      style: textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: scheme.onSurface,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Rejoignez la communauté Sekaijin',
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Pseudo field
+                    TextFormField(
+                      key: const Key('pseudo_field'),
+                      controller: _pseudoController,
+                      enabled: !isLoading,
+                      decoration: const InputDecoration(
+                        labelText: 'Pseudo',
+                        hintText: 'Votre pseudo unique',
+                        prefixIcon: Icon(Icons.person_outlined),
+                      ),
+                      validator: Validators.pseudo,
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Email field
+                    TextFormField(
+                      key: const Key('email_field'),
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      autocorrect: false,
+                      enabled: !isLoading,
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        hintText: 'votre@email.com',
+                        prefixIcon: Icon(Icons.email_outlined),
+                      ),
+                      validator: Validators.email,
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Password field
+                    TextFormField(
+                      key: const Key('password_field'),
+                      controller: _passwordController,
+                      obscureText: _obscurePassword,
+                      enabled: !isLoading,
+                      decoration: InputDecoration(
+                        labelText: 'Mot de passe',
+                        prefixIcon: const Icon(Icons.lock_outlined),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
+                          ),
+                          onPressed: () {
+                            setState(() => _obscurePassword = !_obscurePassword);
+                          },
+                        ),
+                      ),
+                      validator: Validators.registerPassword,
+                    ),
+                    const SizedBox(height: 8),
+                    _buildPasswordHints(),
+                    const SizedBox(height: 16),
+
+                    // Confirm password field
+                    TextFormField(
+                      key: const Key('password_confirm_field'),
+                      controller: _passwordConfirmController,
+                      obscureText: _obscurePasswordConfirm,
+                      enabled: !isLoading,
+                      decoration: InputDecoration(
+                        labelText: 'Confirmer le mot de passe',
+                        prefixIcon: const Icon(Icons.lock_outlined),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePasswordConfirm
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
+                          ),
+                          onPressed: () {
+                            setState(() =>
+                                _obscurePasswordConfirm = !_obscurePasswordConfirm);
+                          },
+                        ),
+                      ),
+                      validator: (value) => Validators.confirmRegisterPassword(
+                        value,
+                        _passwordController.text,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Country of residence dropdown
+                    _buildCountryDropdown(
+                      key: const Key('country_residence_dropdown'),
+                      label: 'Pays de résidence (optionnel)',
+                      value: _selectedCountryResidence,
                       onChanged: isLoading
                           ? null
                           : (value) {
-                              setState(() => _acceptTerms = value ?? false);
+                              setState(() => _selectedCountryResidence = value);
                             },
-                      activeColor: AppColors.primary,
                     ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: isLoading
-                            ? null
-                            : () {
-                                setState(() => _acceptTerms = !_acceptTerms);
-                              },
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 12),
-                          child: RichText(
-                            text: TextSpan(
-                              style: Theme.of(context).textTheme.bodySmall,
-                              children: const [
-                                TextSpan(text: 'J\'accepte les '),
-                                TextSpan(
-                                  text: 'conditions d\'utilisation',
-                                  style: TextStyle(
-                                    color: AppColors.primary,
-                                    decoration: TextDecoration.underline,
+                    const SizedBox(height: 16),
+
+                    // Country of interest dropdown
+                    _buildCountryDropdown(
+                      key: const Key('interest_country_dropdown'),
+                      label: 'Pays qui vous intéresse (optionnel)',
+                      value: _selectedInterestCountry,
+                      onChanged: isLoading
+                          ? null
+                          : (value) {
+                              setState(() => _selectedInterestCountry = value);
+                            },
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Terms checkbox
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Checkbox(
+                          key: const Key('terms_checkbox'),
+                          value: _acceptTerms,
+                          onChanged: isLoading
+                              ? null
+                              : (value) {
+                                  setState(() => _acceptTerms = value ?? false);
+                                },
+                          activeColor: AppColors.primary,
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: isLoading
+                                ? null
+                                : () {
+                                    setState(() => _acceptTerms = !_acceptTerms);
+                                  },
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 12),
+                              child: RichText(
+                                text: TextSpan(
+                                  style: textTheme.bodySmall?.copyWith(
+                                    color: scheme.onSurfaceVariant,
                                   ),
+                                  children: const [
+                                    TextSpan(text: 'J\'accepte les '),
+                                    TextSpan(
+                                      text: 'conditions d\'utilisation',
+                                      style: TextStyle(
+                                        color: AppColors.primary,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                    TextSpan(text: ' et la '),
+                                    TextSpan(
+                                      text: 'politique de confidentialité',
+                                      style: TextStyle(
+                                        color: AppColors.primary,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                TextSpan(text: ' et la '),
-                                TextSpan(
-                                  text: 'politique de confidentialité',
-                                  style: TextStyle(
-                                    color: AppColors.primary,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                           ),
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Register button
+                    SizedBox(
+                      height: 52,
+                      child: ElevatedButton(
+                        key: const Key('register_button'),
+                        onPressed: isLoading ? null : _handleRegister,
+                        child: isLoading
+                            ? const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Text(
+                                'Créer mon compte',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 24),
+                    const SizedBox(height: 20),
 
-                // Register button
-                SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                    key: const Key('register_button'),
-                    onPressed: isLoading ? null : _handleRegister,
-                    child: isLoading
-                        ? const SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const Text(
-                            'Créer mon compte',
+                    // Login link
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Déjà un compte ? ',
+                          style: textTheme.bodySmall?.copyWith(
+                            color: scheme.onSurfaceVariant,
+                          ),
+                        ),
+                        TextButton(
+                          key: const Key('login_link'),
+                          onPressed: isLoading ? null : widget.onLoginTap,
+                          child: const Text(
+                            'Se connecter',
                             style: TextStyle(
-                              fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // Login link
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Déjà un compte ? ',
-                      style: TextStyle(
-                        color: AppColors.onBackground.withValues(alpha: 0.7),
-                      ),
-                    ),
-                    TextButton(
-                      key: const Key('login_link'),
-                      onPressed: isLoading ? null : widget.onLoginTap,
-                      child: const Text(
-                        'Se connecter',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
                         ),
-                      ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
@@ -354,6 +376,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   }
 
   Widget _buildHintRow(String text, bool isValid) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.only(left: 12, top: 4),
       child: Row(
@@ -361,14 +385,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           Icon(
             isValid ? Icons.check_circle : Icons.circle_outlined,
             size: 16,
-            color: isValid ? AppColors.secondary : AppColors.onBackground.withValues(alpha: 0.5),
+            color: isValid ? AppColors.success : scheme.onSurfaceVariant,
           ),
           const SizedBox(width: 8),
           Text(
             text,
             style: TextStyle(
               fontSize: 12,
-              color: isValid ? AppColors.secondary : AppColors.onBackground.withValues(alpha: 0.5),
+              color: isValid ? AppColors.success : scheme.onSurfaceVariant,
             ),
           ),
         ],

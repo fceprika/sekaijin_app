@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/config/app_config.dart';
+import '../../../core/config/theme.dart';
 import '../../../domain/entities/place.dart';
 
 class CompactPlaceCard extends StatelessWidget {
@@ -26,11 +27,11 @@ class CompactPlaceCard extends StatelessWidget {
   Color _getStatusColor(PlaceStatus status, ThemeData theme) {
     switch (status) {
       case PlaceStatus.approved:
-        return Colors.green;
+        return AppColors.success;
       case PlaceStatus.pending:
-        return Colors.orange;
+        return AppColors.warning;
       case PlaceStatus.rejected:
-        return Colors.red;
+        return AppColors.error;
     }
   }
 
@@ -55,14 +56,14 @@ class CompactPlaceCard extends StatelessWidget {
       elevation: 0,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(18),
         side: BorderSide(
           color: theme.colorScheme.outline.withValues(alpha: 0.2),
         ),
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(18),
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(

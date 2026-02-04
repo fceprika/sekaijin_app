@@ -15,18 +15,22 @@ class ArticleListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.outline),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+              color: AppColors.shadow,
+              blurRadius: 18,
+              offset: const Offset(0, 8),
             ),
           ],
         ),
@@ -35,7 +39,7 @@ class ArticleListCard extends StatelessWidget {
           children: [
             // Image
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
               child: AspectRatio(
                 aspectRatio: 16 / 9,
                 child: article.fullImageUrl != null
@@ -65,15 +69,14 @@ class ArticleListCard extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(6),
+                          color: scheme.primary.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
                           article.categoryLabel,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.primary,
+                          style: textTheme.labelSmall?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: scheme.primary,
                           ),
                         ),
                       ),
@@ -90,10 +93,10 @@ class ArticleListCard extends StatelessWidget {
                   // Title
                   Text(
                     article.title,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.onBackground,
-                        ),
+                    style: textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: scheme.onSurface,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -101,9 +104,8 @@ class ArticleListCard extends StatelessWidget {
                   // Summary
                   Text(
                     article.summary,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: AppColors.onBackground.withValues(alpha: 0.7),
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: scheme.onSurfaceVariant,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -116,17 +118,16 @@ class ArticleListCard extends StatelessWidget {
                       if (article.author != null) ...[
                         CircleAvatar(
                           radius: 12,
-                          backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+                          backgroundColor: scheme.primary.withValues(alpha: 0.12),
                           backgroundImage: article.author!.fullAvatarUrl != null
                               ? NetworkImage(article.author!.fullAvatarUrl!)
                               : null,
                           child: article.author!.fullAvatarUrl == null
                               ? Text(
                                   article.author!.displayName[0].toUpperCase(),
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.primary,
+                                  style: textTheme.labelSmall?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: scheme.primary,
                                   ),
                                 )
                               : null,
@@ -135,9 +136,8 @@ class ArticleListCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             article.author!.displayName,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: AppColors.onBackground.withValues(alpha: 0.6),
+                            style: textTheme.bodySmall?.copyWith(
+                              color: scheme.onSurfaceVariant,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -149,14 +149,13 @@ class ArticleListCard extends StatelessWidget {
                         Icon(
                           Icons.access_time,
                           size: 14,
-                          color: AppColors.onBackground.withValues(alpha: 0.6),
+                          color: scheme.onSurfaceVariant,
                         ),
                         const SizedBox(width: 4),
                         Text(
                           '${article.readingTime} min',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: AppColors.onBackground.withValues(alpha: 0.6),
+                          style: textTheme.bodySmall?.copyWith(
+                            color: scheme.onSurfaceVariant,
                           ),
                         ),
                       ],
@@ -173,12 +172,12 @@ class ArticleListCard extends StatelessWidget {
 
   Widget _buildPlaceholderImage() {
     return Container(
-      color: AppColors.primary.withValues(alpha: 0.1),
+      decoration: const BoxDecoration(gradient: AppGradients.hero),
       child: const Center(
         child: Icon(
           Icons.article,
           size: 48,
-          color: AppColors.primary,
+          color: AppColors.tertiary,
         ),
       ),
     );

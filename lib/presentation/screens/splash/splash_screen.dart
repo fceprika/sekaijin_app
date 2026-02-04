@@ -28,39 +28,47 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              key: const Key('splash_logo'),
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
+      body: Container(
+        decoration: const BoxDecoration(gradient: AppGradients.hero),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                key: const Key('splash_logo'),
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  gradient: AppGradients.accent,
+                  borderRadius: BorderRadius.circular(32),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.25),
+                      blurRadius: 18,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.public,
+                  size: 72,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Sekaijin',
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.tertiary,
+                    ),
+              ),
+              const SizedBox(height: 48),
+              const CircularProgressIndicator(
                 color: AppColors.primary,
-                borderRadius: BorderRadius.circular(30),
               ),
-              child: const Icon(
-                Icons.public,
-                size: 72,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'Sekaijin',
-              style: TextStyle(
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
-                color: AppColors.primary,
-              ),
-            ),
-            const SizedBox(height: 48),
-            const CircularProgressIndicator(
-              color: AppColors.primary,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -21,14 +21,14 @@ class StatCard extends StatelessWidget {
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(18),
         side: BorderSide(
           color: theme.colorScheme.outline.withValues(alpha: 0.2),
         ),
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(18),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -36,14 +36,14 @@ class StatCard extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                size: 32,
-                color: theme.colorScheme.primary,
+                size: 30,
+                color: theme.colorScheme.tertiary,
               ),
               const SizedBox(height: 8),
               Text(
                 value,
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w700,
                   color: theme.colorScheme.onSurface,
                 ),
               ),

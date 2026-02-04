@@ -45,6 +45,9 @@ class NewsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -52,12 +55,13 @@ class NewsCard extends StatelessWidget {
         margin: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.outline),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+              color: AppColors.shadow,
+              blurRadius: 18,
+              offset: const Offset(0, 8),
             ),
           ],
         ),
@@ -66,15 +70,15 @@ class NewsCard extends StatelessWidget {
           children: [
             // Image
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
               child: Container(
                 height: 120,
                 width: double.infinity,
-                color: AppColors.primary.withValues(alpha: 0.1),
-                child: const Icon(
+                decoration: const BoxDecoration(gradient: AppGradients.accent),
+                child: Icon(
                   Icons.newspaper,
-                  size: 48,
-                  color: AppColors.primary,
+                  size: 46,
+                  color: scheme.onPrimary,
                 ),
               ),
             ),
@@ -89,15 +93,15 @@ class NewsCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: AppColors.secondary.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(4),
+                        color: scheme.secondary.withValues(alpha: 0.14),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
                         data.category,
-                        style: const TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.secondary,
+                        style: textTheme.labelSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: scheme.secondary,
+                          letterSpacing: 0.2,
                         ),
                       ),
                     ),
@@ -106,10 +110,10 @@ class NewsCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         data.title,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.onBackground,
-                            ),
+                        style: textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: scheme.onSurface,
+                        ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -117,9 +121,8 @@ class NewsCard extends StatelessWidget {
                     // Date
                     Text(
                       _formatDate(data.date),
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppColors.onBackground.withValues(alpha: 0.6),
+                      style: textTheme.bodySmall?.copyWith(
+                        color: scheme.onSurfaceVariant,
                       ),
                     ),
                   ],

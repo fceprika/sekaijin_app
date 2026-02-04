@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/config/theme.dart';
+
 class RatingStars extends StatelessWidget {
   final double rating;
   final int maxStars;
@@ -12,9 +14,9 @@ class RatingStars extends StatelessWidget {
     required this.rating,
     this.maxStars = 5,
     this.size = 16,
-    this.filledColor = Colors.amber,
+    this.filledColor = AppColors.rating,
     Color? emptyColor,
-  }) : emptyColor = emptyColor ?? const Color(0xFFE0E0E0);
+  }) : emptyColor = emptyColor ?? AppColors.outline;
 
   @override
   Widget build(BuildContext context) {

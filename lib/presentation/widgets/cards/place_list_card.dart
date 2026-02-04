@@ -15,18 +15,22 @@ class PlaceListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.outline),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+              color: AppColors.shadow,
+              blurRadius: 18,
+              offset: const Offset(0, 8),
             ),
           ],
         ),
@@ -35,7 +39,7 @@ class PlaceListCard extends StatelessWidget {
           children: [
             // Image
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
               child: AspectRatio(
                 aspectRatio: 16 / 9,
                 child: place.imageUrls.isNotEmpty
@@ -63,15 +67,14 @@ class PlaceListCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(6),
+                      color: scheme.primary.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
                       '${place.category.emoji} ${place.category.label}',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.primary,
+                      style: textTheme.labelSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: scheme.primary,
                       ),
                     ),
                   ),
@@ -79,10 +82,10 @@ class PlaceListCard extends StatelessWidget {
                   // Title
                   Text(
                     place.title,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.onBackground,
-                        ),
+                    style: textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: scheme.onSurface,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -94,15 +97,14 @@ class PlaceListCard extends StatelessWidget {
                         Icon(
                           Icons.location_on,
                           size: 16,
-                          color: AppColors.onBackground.withValues(alpha: 0.6),
+                          color: scheme.onSurfaceVariant,
                         ),
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
                             place.city!.name,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: AppColors.onBackground.withValues(alpha: 0.6),
+                            style: textTheme.bodyMedium?.copyWith(
+                              color: scheme.onSurfaceVariant,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -117,28 +119,26 @@ class PlaceListCard extends StatelessWidget {
                       ...List.generate(5, (index) {
                         final starValue = index + 1;
                         if (place.ratingAverage >= starValue) {
-                          return const Icon(Icons.star, size: 16, color: Colors.amber);
+                          return const Icon(Icons.star, size: 16, color: AppColors.rating);
                         } else if (place.ratingAverage >= starValue - 0.5) {
-                          return const Icon(Icons.star_half, size: 16, color: Colors.amber);
+                          return const Icon(Icons.star_half, size: 16, color: AppColors.rating);
                         } else {
-                          return Icon(Icons.star_border, size: 16, color: Colors.amber.shade200);
+                          return Icon(Icons.star_border, size: 16, color: AppColors.rating.withValues(alpha: 0.4));
                         }
                       }),
                       const SizedBox(width: 8),
                       Text(
                         place.ratingAverage.toStringAsFixed(1),
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.onBackground,
+                        style: textTheme.labelLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: scheme.onSurface,
                         ),
                       ),
                       const SizedBox(width: 4),
                       Text(
                         '(${place.reviewsCount} avis)',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: AppColors.onBackground.withValues(alpha: 0.6),
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: scheme.onSurfaceVariant,
                         ),
                       ),
                     ],
@@ -154,12 +154,12 @@ class PlaceListCard extends StatelessWidget {
 
   Widget _buildPlaceholderImage() {
     return Container(
-      color: AppColors.primary.withValues(alpha: 0.1),
+      decoration: const BoxDecoration(gradient: AppGradients.hero),
       child: const Center(
         child: Icon(
           Icons.place,
           size: 48,
-          color: AppColors.primary,
+          color: AppColors.tertiary,
         ),
       ),
     );

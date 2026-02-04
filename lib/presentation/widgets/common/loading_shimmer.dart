@@ -18,8 +18,8 @@ class LoadingShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppColors.onBackground.withValues(alpha: 0.1),
-      highlightColor: AppColors.onBackground.withValues(alpha: 0.05),
+      baseColor: AppColors.surfaceVariant,
+      highlightColor: AppColors.surfaceAlt,
       child: Container(
         width: width,
         height: height,
@@ -38,8 +38,8 @@ class PlaceCardShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppColors.onBackground.withValues(alpha: 0.1),
-      highlightColor: AppColors.onBackground.withValues(alpha: 0.05),
+      baseColor: AppColors.surfaceVariant,
+      highlightColor: AppColors.surfaceAlt,
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
@@ -118,8 +118,8 @@ class ArticleCardShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppColors.onBackground.withValues(alpha: 0.1),
-      highlightColor: AppColors.onBackground.withValues(alpha: 0.05),
+      baseColor: AppColors.surfaceVariant,
+      highlightColor: AppColors.surfaceAlt,
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
@@ -220,8 +220,8 @@ class EventCardShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppColors.onBackground.withValues(alpha: 0.1),
-      highlightColor: AppColors.onBackground.withValues(alpha: 0.05),
+      baseColor: AppColors.surfaceVariant,
+      highlightColor: AppColors.surfaceAlt,
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
@@ -309,8 +309,8 @@ class ReviewCardShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppColors.onBackground.withValues(alpha: 0.1),
-      highlightColor: AppColors.onBackground.withValues(alpha: 0.05),
+      baseColor: AppColors.surfaceVariant,
+      highlightColor: AppColors.surfaceAlt,
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
@@ -401,8 +401,8 @@ class CompactCardShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppColors.onBackground.withValues(alpha: 0.1),
-      highlightColor: AppColors.onBackground.withValues(alpha: 0.05),
+      baseColor: AppColors.surfaceVariant,
+      highlightColor: AppColors.surfaceAlt,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         padding: const EdgeInsets.all(12),

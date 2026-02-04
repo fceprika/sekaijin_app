@@ -25,9 +25,10 @@ class CountrySelector extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedCountry = ref.watch(selectedCountryProvider);
 
-    return Row(
+    return Wrap(
       key: const Key('country_selector'),
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      spacing: 12,
+      runSpacing: 12,
       children: Country.values.map((country) {
         final isSelected = country == selectedCountry;
         return _CountryButton(
@@ -57,24 +58,27 @@ class _CountryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : AppColors.surface,
-          borderRadius: BorderRadius.circular(12),
+          color: isSelected ? null : AppColors.surface,
+          gradient: isSelected ? AppGradients.accent : null,
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.onBackground.withValues(alpha: 0.2),
-            width: isSelected ? 2 : 1,
+            color: isSelected ? AppColors.primary : AppColors.outline,
+            width: isSelected ? 1.5 : 1,
           ),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.3),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+                    color: AppColors.primary.withValues(alpha: 0.25),
+                    blurRadius: 12,
+                    offset: const Offset(0, 6),
                   ),
                 ]
               : null,
@@ -91,8 +95,8 @@ class _CountryButton extends StatelessWidget {
               country.code,
               style: TextStyle(
                 fontSize: 12,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: isSelected ? Colors.white : AppColors.onBackground,
+                fontWeight: FontWeight.w700,
+                color: isSelected ? AppColors.onPrimary : scheme.onSurface,
               ),
             ),
           ],

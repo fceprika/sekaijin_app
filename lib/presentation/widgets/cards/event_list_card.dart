@@ -18,6 +18,9 @@ class EventListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return GestureDetector(
       onTap: onTap,
       child: Opacity(
@@ -26,12 +29,13 @@ class EventListCard extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 16),
           decoration: BoxDecoration(
             color: AppColors.surface,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: AppColors.outline),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.08),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
+                color: AppColors.shadow,
+                blurRadius: 18,
+                offset: const Offset(0, 8),
               ),
             ],
           ),
@@ -51,10 +55,10 @@ class EventListCard extends StatelessWidget {
                       Text(
                         event.title,
                         key: Key('event_title_$index'),
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.onBackground,
-                            ),
+                        style: textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: scheme.onSurface,
+                        ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -65,7 +69,7 @@ class EventListCard extends StatelessWidget {
                           Icon(
                             event.isOnline ? Icons.videocam : Icons.location_on,
                             size: 14,
-                            color: AppColors.onBackground.withValues(alpha: 0.6),
+                            color: scheme.onSurfaceVariant,
                           ),
                           const SizedBox(width: 4),
                           Expanded(
@@ -74,9 +78,8 @@ class EventListCard extends StatelessWidget {
                                   ? 'En ligne'
                                   : (event.location ?? 'Lieu à confirmer'),
                               key: Key('event_location_$index'),
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: AppColors.onBackground.withValues(alpha: 0.6),
+                              style: textTheme.bodySmall?.copyWith(
+                                color: scheme.onSurfaceVariant,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -101,16 +104,15 @@ class EventListCard extends StatelessWidget {
                             Icon(
                               Icons.people,
                               size: 14,
-                              color: AppColors.onBackground.withValues(alpha: 0.6),
+                              color: scheme.onSurfaceVariant,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               '${event.currentParticipants}/${event.maxParticipants}',
-                              style: TextStyle(
-                                fontSize: 12,
+                              style: textTheme.bodySmall?.copyWith(
                                 color: event.isFull
                                     ? AppColors.error
-                                    : AppColors.onBackground.withValues(alpha: 0.6),
+                                    : scheme.onSurfaceVariant,
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -122,7 +124,7 @@ class EventListCard extends StatelessWidget {
                       // Past badge
                       if (event.isPast) ...[
                         const SizedBox(height: 8),
-                        _buildBadge('Passé', AppColors.onBackground.withValues(alpha: 0.5)),
+                        _buildBadge('Passé', scheme.onSurfaceVariant),
                       ],
                     ],
                   ),
@@ -144,12 +146,11 @@ class EventListCard extends StatelessWidget {
       width: 60,
       padding: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(
-        color: event.isPast
-            ? AppColors.onBackground.withValues(alpha: 0.1)
-            : AppColors.primary,
+        gradient: event.isPast ? null : AppGradients.accent,
+        color: event.isPast ? AppColors.surfaceVariant : null,
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(16),
-          bottomLeft: Radius.circular(16),
+          topLeft: Radius.circular(20),
+          bottomLeft: Radius.circular(20),
         ),
       ),
       child: Column(
@@ -169,7 +170,7 @@ class EventListCard extends StatelessWidget {
               fontSize: 12,
               fontWeight: FontWeight.w600,
               color: event.isPast
-                  ? AppColors.onBackground.withValues(alpha: 0.7)
+                  ? AppColors.onSurfaceVariant
                   : AppColors.onPrimary.withValues(alpha: 0.9),
             ),
           ),
@@ -183,7 +184,7 @@ class EventListCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Text(
         text,
@@ -201,9 +202,9 @@ class EventListCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: event.isFree
-            ? AppColors.secondary.withValues(alpha: 0.1)
-            : AppColors.rating.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(4),
+            ? AppColors.secondary.withValues(alpha: 0.12)
+            : AppColors.rating.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Text(
         event.isFree ? 'Gratuit' : '${event.price.toStringAsFixed(0)}€',

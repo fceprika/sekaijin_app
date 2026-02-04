@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/config/theme.dart';
 import '../../../domain/entities/place_review.dart';
 
 class CompactReviewCard extends StatelessWidget {
@@ -23,14 +24,14 @@ class CompactReviewCard extends StatelessWidget {
       elevation: 0,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(18),
         side: BorderSide(
           color: theme.colorScheme.outline.withValues(alpha: 0.2),
         ),
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(18),
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(
@@ -59,7 +60,7 @@ class CompactReviewCard extends StatelessWidget {
                         i < review.rating ? Icons.star : Icons.star_border,
                         size: 16,
                         color: i < review.rating
-                            ? Colors.amber
+                            ? AppColors.rating
                             : theme.colorScheme.outline,
                       );
                     }),

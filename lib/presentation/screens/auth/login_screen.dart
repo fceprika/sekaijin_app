@@ -58,146 +58,163 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
     final isLoading = authState is AuthLoading || _isSubmitting;
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       key: const Key('login_screen'),
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(AppConstants.defaultPadding),
-            child: Form(
-              key: _formKey,
+      body: Container(
+        decoration: const BoxDecoration(gradient: AppGradients.hero),
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(AppConstants.defaultPadding),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Logo
                   _buildLogo(),
-                  const SizedBox(height: 48),
-
-                  // Title
-                  Text(
-                    'Connexion',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.onBackground,
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Connectez-vous à votre compte Sekaijin',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.onBackground.withValues(alpha: 0.7),
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
                   const SizedBox(height: 32),
-
-                  // Email field
-                  TextFormField(
-                    key: const Key('email_field'),
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    autocorrect: false,
-                    enabled: !isLoading,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      hintText: 'votre@email.com',
-                      prefixIcon: Icon(Icons.email_outlined),
-                    ),
-                    validator: Validators.email,
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Password field
-                  TextFormField(
-                    key: const Key('password_field'),
-                    controller: _passwordController,
-                    obscureText: _obscurePassword,
-                    enabled: !isLoading,
-                    decoration: InputDecoration(
-                      labelText: 'Mot de passe',
-                      prefixIcon: const Icon(Icons.lock_outlined),
-                      suffixIcon: IconButton(
-                        key: const Key('password_visibility_toggle'),
-                        icon: Icon(
-                          _obscurePassword
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
+                  Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: AppColors.outline),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.shadow,
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
                         ),
-                        onPressed: () {
-                          setState(() => _obscurePassword = !_obscurePassword);
-                        },
-                      ),
+                      ],
                     ),
-                    validator: Validators.password,
-                  ),
-                  const SizedBox(height: 8),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'Connexion',
+                            style: textTheme.headlineSmall?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: scheme.onSurface,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Connectez-vous à votre compte Sekaijin',
+                            style: textTheme.bodyMedium?.copyWith(
+                              color: scheme.onSurfaceVariant,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 24),
 
-                  // Forgot password link
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      key: const Key('forgot_password_link'),
-                      onPressed: isLoading ? null : () {},
-                      child: const Text(
-                        'Mot de passe oublié ?',
-                        style: TextStyle(
-                          color: AppColors.primary,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
+                          // Email field
+                          TextFormField(
+                            key: const Key('email_field'),
+                            controller: _emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            autocorrect: false,
+                            enabled: !isLoading,
+                            decoration: const InputDecoration(
+                              labelText: 'Email',
+                              hintText: 'votre@email.com',
+                              prefixIcon: Icon(Icons.email_outlined),
+                            ),
+                            validator: Validators.email,
+                          ),
+                          const SizedBox(height: 16),
 
-                  // Login button
-                  SizedBox(
-                    height: 50,
-                    child: ElevatedButton(
-                      key: const Key('login_button'),
-                      onPressed: isLoading ? null : _handleLogin,
-                      child: isLoading
-                          ? const SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : const Text(
-                              'Se connecter',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                          // Password field
+                          TextFormField(
+                            key: const Key('password_field'),
+                            controller: _passwordController,
+                            obscureText: _obscurePassword,
+                            enabled: !isLoading,
+                            decoration: InputDecoration(
+                              labelText: 'Mot de passe',
+                              prefixIcon: const Icon(Icons.lock_outlined),
+                              suffixIcon: IconButton(
+                                key: const Key('password_visibility_toggle'),
+                                icon: Icon(
+                                  _obscurePassword
+                                      ? Icons.visibility_outlined
+                                      : Icons.visibility_off_outlined,
+                                ),
+                                onPressed: () {
+                                  setState(() => _obscurePassword = !_obscurePassword);
+                                },
                               ),
                             ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-
-                  // Register link
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Pas de compte ? ',
-                        style: TextStyle(
-                          color: AppColors.onBackground.withValues(alpha: 0.7),
-                        ),
-                      ),
-                      TextButton(
-                        key: const Key('register_link'),
-                        onPressed: isLoading ? null : widget.onRegisterTap,
-                        child: const Text(
-                          'Créer un compte',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
+                            validator: Validators.password,
                           ),
-                        ),
+                          const SizedBox(height: 8),
+
+                          // Forgot password link
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                              key: const Key('forgot_password_link'),
+                              onPressed: isLoading ? null : () {},
+                              child: const Text('Mot de passe oublié ?'),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+
+                          // Login button
+                          SizedBox(
+                            height: 52,
+                            child: ElevatedButton(
+                              key: const Key('login_button'),
+                              onPressed: isLoading ? null : _handleLogin,
+                              child: isLoading
+                                  ? const SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'Se connecter',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+
+                          // Register link
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Pas de compte ? ',
+                                style: textTheme.bodySmall?.copyWith(
+                                  color: scheme.onSurfaceVariant,
+                                ),
+                              ),
+                              TextButton(
+                                key: const Key('register_link'),
+                                onPressed: isLoading ? null : widget.onRegisterTap,
+                                child: const Text(
+                                  'Créer un compte',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ],
               ),
@@ -212,25 +229,32 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     return Column(
       children: [
         Container(
-          width: 80,
-          height: 80,
+          width: 84,
+          height: 84,
           decoration: BoxDecoration(
-            color: AppColors.primary,
-            borderRadius: BorderRadius.circular(20),
+            gradient: AppGradients.accent,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primary.withValues(alpha: 0.25),
+                blurRadius: 16,
+                offset: const Offset(0, 8),
+              ),
+            ],
           ),
           child: const Icon(
             Icons.public,
-            size: 48,
+            size: 46,
             color: Colors.white,
           ),
         ),
         const SizedBox(height: 16),
-        const Text(
+        Text(
           'Sekaijin',
           style: TextStyle(
             fontSize: 28,
-            fontWeight: FontWeight.bold,
-            color: AppColors.primary,
+            fontWeight: FontWeight.w700,
+            color: AppColors.tertiary,
           ),
         ),
       ],
