@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/config/theme.dart';
 import '../../../domain/entities/article.dart';
 import '../../providers/articles_provider.dart';
+import '../../providers/paged_state.dart';
 import '../../widgets/cards/article_list_card.dart';
 import '../../widgets/common/empty_state.dart';
 import '../../widgets/common/error_state.dart';
@@ -86,7 +87,7 @@ class ArticlesListView extends ConsumerWidget {
   Widget _buildArticlesList(
     BuildContext context,
     WidgetRef ref,
-    ArticlesState state,
+    PagedState<Article> state,
   ) {
     if (state.isLoading && state.items.isEmpty) {
       return _buildLoadingShimmer();

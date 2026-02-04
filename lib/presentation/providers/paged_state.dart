@@ -57,7 +57,7 @@ class PagedNotifier<T> extends StateNotifier<PagedState<T>> {
       return;
     }
 
-    final items = response?.data ?? const <T>[];
+    final items = response?.data ?? <T>[];
     state = PagedState(
       items: items,
       isLoading: false,
@@ -96,7 +96,7 @@ class PagedNotifier<T> extends StateNotifier<PagedState<T>> {
       return;
     }
 
-    final newItems = <T>[...state.items, ...(response?.data ?? const <T>[])];
+    final newItems = <T>[...state.items, ...(response?.data ?? <T>[])];
     state = PagedState(
       items: newItems,
       isLoading: false,

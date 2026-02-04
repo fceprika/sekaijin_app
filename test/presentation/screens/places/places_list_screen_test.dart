@@ -6,6 +6,7 @@ import 'package:sekaijin_app/data/models/api_response.dart';
 import 'package:sekaijin_app/data/models/create_place_request.dart';
 import 'package:sekaijin_app/domain/entities/place.dart';
 import 'package:sekaijin_app/domain/repositories/place_repository.dart';
+import 'package:sekaijin_app/presentation/providers/paged_state.dart';
 import 'package:sekaijin_app/presentation/providers/places_provider.dart';
 import 'package:sekaijin_app/presentation/screens/places/places_list_screen.dart';
 
@@ -42,14 +43,14 @@ void main() {
   ];
 
   Widget createScreen({
-    PlacesState? placesState,
+    PagedState<Place>? placesState,
     PlaceCategory? categoryFilter,
     String? sortBy,
   }) {
     return ProviderScope(
       overrides: [
         placesProvider.overrideWith((ref) {
-          final notifier = _MockPlacesNotifier(ref, placesState ?? const PlacesState());
+          final notifier = _MockPlacesNotifier(ref, placesState ?? const PagedState<Place>());
           return notifier;
         }),
         if (categoryFilter != null)
@@ -65,7 +66,7 @@ void main() {
   group('PlacesListScreen', () {
     testWidgets('renders with screen key', (tester) async {
       await tester.pumpWidget(createScreen(
-        placesState: PlacesState(places: mockPlaces, total: 2),
+        placesState: PagedState<Place>(items: mockPlaces, total: 2),
       ));
       await tester.pump();
 
@@ -74,7 +75,7 @@ void main() {
 
     testWidgets('displays category chips section with Tous chip', (tester) async {
       await tester.pumpWidget(createScreen(
-        placesState: PlacesState(places: mockPlaces, total: 2),
+        placesState: PagedState<Place>(items: mockPlaces, total: 2),
       ));
       await tester.pump();
 
@@ -85,7 +86,7 @@ void main() {
 
     testWidgets('sort dropdown is visible', (tester) async {
       await tester.pumpWidget(createScreen(
-        placesState: PlacesState(places: mockPlaces, total: 2),
+        placesState: PagedState<Place>(items: mockPlaces, total: 2),
         sortBy: 'created_at',
       ));
       await tester.pump();
@@ -96,7 +97,7 @@ void main() {
 
     testWidgets('sort dropdown opens and shows options', (tester) async {
       await tester.pumpWidget(createScreen(
-        placesState: PlacesState(places: mockPlaces, total: 2),
+        placesState: PagedState<Place>(items: mockPlaces, total: 2),
         sortBy: 'created_at',
       ));
       await tester.pump();
@@ -111,7 +112,7 @@ void main() {
 
     testWidgets('displays empty state when no places', (tester) async {
       await tester.pumpWidget(createScreen(
-        placesState: const PlacesState(places: [], total: 0),
+        placesState: const PagedState<Place>(items: [], total: 0),
       ));
       await tester.pump();
 
@@ -121,7 +122,7 @@ void main() {
 
     testWidgets('displays place cards when places exist', (tester) async {
       await tester.pumpWidget(createScreen(
-        placesState: PlacesState(places: mockPlaces, total: 2),
+        placesState: PagedState<Place>(items: mockPlaces, total: 2),
       ));
       await tester.pump();
 
@@ -137,7 +138,7 @@ void main() {
 
     testWidgets('displays results count', (tester) async {
       await tester.pumpWidget(createScreen(
-        placesState: PlacesState(places: mockPlaces, total: 25),
+        placesState: PagedState<Place>(items: mockPlaces, total: 25),
       ));
       await tester.pump();
 
@@ -146,7 +147,7 @@ void main() {
 
     testWidgets('shows loading indicator when loading', (tester) async {
       await tester.pumpWidget(createScreen(
-        placesState: const PlacesState(isLoading: true),
+        placesState: const PagedState<Place>(isLoading: true),
       ));
       await tester.pump();
 
@@ -155,7 +156,7 @@ void main() {
 
     testWidgets('has pull-to-refresh', (tester) async {
       await tester.pumpWidget(createScreen(
-        placesState: PlacesState(places: mockPlaces, total: 2),
+        placesState: PagedState<Place>(items: mockPlaces, total: 2),
       ));
       await tester.pump();
 
@@ -164,7 +165,7 @@ void main() {
 
     testWidgets('appbar has correct title', (tester) async {
       await tester.pumpWidget(createScreen(
-        placesState: PlacesState(places: mockPlaces, total: 2),
+        placesState: PagedState<Place>(items: mockPlaces, total: 2),
       ));
       await tester.pump();
 
@@ -174,15 +175,15 @@ void main() {
 }
 
 class _MockPlacesNotifier extends PlacesNotifier {
-  final PlacesState _mockState;
+  final PagedState<Place> _mockState;
 
   _MockPlacesNotifier(Ref ref, this._mockState) : super(_MockPlaceRepository(), ref);
 
   @override
-  PlacesState get state => _mockState;
+  PagedState<Place> get state => _mockState;
 
   @override
-  Future<void> loadPlaces() async {}
+  Future<void> loadInitial() async {}
 
   @override
   Future<void> loadMore() async {}

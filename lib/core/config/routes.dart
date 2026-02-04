@@ -37,20 +37,26 @@ class AppRoutes {
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final authState = ref.watch(authStateProvider);
-
   return GoRouter(
     initialLocation: AppRoutes.splash,
     refreshListenable: _RouterRefreshNotifier(ref),
     redirect: (context, state) {
+      final authState = ref.read(authStateProvider);
       final isOnSplash = state.matchedLocation == AppRoutes.splash;
       final isOnAuthRoute = state.matchedLocation == AppRoutes.login ||
           state.matchedLocation == AppRoutes.register;
 
-      // Don't redirect if on splash screen (it handles its own navigation)
-      if (isOnSplash) return null;
+      // Still loading or initial — stay where we are
+      if (authState is AuthInitial || authState is AuthLoading) {
+        return null;
+      }
 
       final isAuthenticated = authState is AuthAuthenticated;
+
+      // Splash is done once auth state is resolved — redirect accordingly
+      if (isOnSplash) {
+        return isAuthenticated ? AppRoutes.home : AppRoutes.login;
+      }
 
       // If not authenticated and not on auth route, redirect to login
       if (!isAuthenticated && !isOnAuthRoute) {

@@ -41,11 +41,11 @@ final homeDataProvider = FutureProvider.autoDispose<HomeData>((ref) async {
     throw Exception('Impossible de charger les données d\'accueil');
   }
 
-  final latestNews = (articlesResponse?.data ?? [])
+  final latestNews = ((articlesResponse?.data ?? []) as List<Article>)
       .map(_mapArticleToNewsCard)
       .toList();
 
-  final popularPlaces = (placesResponse?.data ?? [])
+  final popularPlaces = ((placesResponse?.data ?? []) as List<Place>)
       .map(_mapPlaceToCard)
       .toList();
 

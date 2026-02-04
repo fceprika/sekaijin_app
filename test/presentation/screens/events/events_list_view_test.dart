@@ -8,6 +8,7 @@ import 'package:sekaijin_app/domain/entities/event.dart';
 import 'package:sekaijin_app/domain/entities/user.dart';
 import 'package:sekaijin_app/domain/repositories/event_repository.dart';
 import 'package:sekaijin_app/presentation/providers/events_provider.dart';
+import 'package:sekaijin_app/presentation/providers/paged_state.dart';
 import 'package:sekaijin_app/presentation/screens/news/events_list_view.dart';
 
 void main() {
@@ -61,7 +62,7 @@ void main() {
   ];
 
   Widget createScreen({
-    EventsState? eventsState,
+    PagedState<Event>? eventsState,
     bool? onlineFilter,
   }) {
     return ProviderScope(
@@ -69,7 +70,7 @@ void main() {
         eventsListProvider.overrideWith((ref) {
           final notifier = _MockEventsNotifier(
             ref,
-            eventsState ?? const EventsState(),
+            eventsState ?? const PagedState<Event>(),
           );
           return notifier;
         }),
@@ -85,7 +86,7 @@ void main() {
   group('EventsListView', () {
     testWidgets('renders with screen key', (tester) async {
       await tester.pumpWidget(createScreen(
-        eventsState: EventsState(events: mockEvents, total: 2),
+        eventsState: PagedState<Event>(items: mockEvents, total: 2),
       ));
       await tester.pump();
 
@@ -94,7 +95,7 @@ void main() {
 
     testWidgets('displays filter toggles', (tester) async {
       await tester.pumpWidget(createScreen(
-        eventsState: EventsState(events: mockEvents, total: 2),
+        eventsState: PagedState<Event>(items: mockEvents, total: 2),
       ));
       await tester.pump();
 
@@ -105,7 +106,7 @@ void main() {
 
     testWidgets('displays Tous filter text', (tester) async {
       await tester.pumpWidget(createScreen(
-        eventsState: EventsState(events: mockEvents, total: 2),
+        eventsState: PagedState<Event>(items: mockEvents, total: 2),
       ));
       await tester.pump();
 
@@ -114,7 +115,7 @@ void main() {
 
     testWidgets('displays En ligne filter text', (tester) async {
       await tester.pumpWidget(createScreen(
-        eventsState: EventsState(events: mockEvents, total: 2),
+        eventsState: PagedState<Event>(items: mockEvents, total: 2),
       ));
       await tester.pump();
 
@@ -123,7 +124,7 @@ void main() {
 
     testWidgets('displays event cards with correct keys', (tester) async {
       await tester.pumpWidget(createScreen(
-        eventsState: EventsState(events: mockEvents, total: 2),
+        eventsState: PagedState<Event>(items: mockEvents, total: 2),
       ));
       await tester.pump();
 
@@ -132,7 +133,7 @@ void main() {
 
     testWidgets('event cards have date keys', (tester) async {
       await tester.pumpWidget(createScreen(
-        eventsState: EventsState(events: mockEvents, total: 2),
+        eventsState: PagedState<Event>(items: mockEvents, total: 2),
       ));
       await tester.pump();
 
@@ -141,7 +142,7 @@ void main() {
 
     testWidgets('event cards have title keys', (tester) async {
       await tester.pumpWidget(createScreen(
-        eventsState: EventsState(events: mockEvents, total: 2),
+        eventsState: PagedState<Event>(items: mockEvents, total: 2),
       ));
       await tester.pump();
 
@@ -150,7 +151,7 @@ void main() {
 
     testWidgets('event cards have location keys', (tester) async {
       await tester.pumpWidget(createScreen(
-        eventsState: EventsState(events: mockEvents, total: 2),
+        eventsState: PagedState<Event>(items: mockEvents, total: 2),
       ));
       await tester.pump();
 
@@ -159,7 +160,7 @@ void main() {
 
     testWidgets('displays event title', (tester) async {
       await tester.pumpWidget(createScreen(
-        eventsState: EventsState(events: mockEvents, total: 2),
+        eventsState: PagedState<Event>(items: mockEvents, total: 2),
       ));
       await tester.pump();
 
@@ -168,7 +169,7 @@ void main() {
 
     testWidgets('displays empty state when no events', (tester) async {
       await tester.pumpWidget(createScreen(
-        eventsState: const EventsState(events: [], total: 0),
+        eventsState: const PagedState<Event>(items: [], total: 0),
       ));
       await tester.pump();
 
@@ -177,7 +178,7 @@ void main() {
 
     testWidgets('has RefreshIndicator for pull-to-refresh', (tester) async {
       await tester.pumpWidget(createScreen(
-        eventsState: EventsState(events: mockEvents, total: 2),
+        eventsState: PagedState<Event>(items: mockEvents, total: 2),
       ));
       await tester.pump();
 
@@ -187,16 +188,16 @@ void main() {
 }
 
 class _MockEventsNotifier extends EventsNotifier {
-  final EventsState _mockState;
+  final PagedState<Event> _mockState;
 
   _MockEventsNotifier(Ref ref, this._mockState)
       : super(_MockEventRepository(), ref);
 
   @override
-  EventsState get state => _mockState;
+  PagedState<Event> get state => _mockState;
 
   @override
-  Future<void> loadEvents() async {}
+  Future<void> loadInitial() async {}
 
   @override
   Future<void> loadMore() async {}

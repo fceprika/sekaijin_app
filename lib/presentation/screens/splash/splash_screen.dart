@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/config/theme.dart';
-import '../../../core/config/routes.dart';
 import '../../providers/auth_provider.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
@@ -14,35 +12,17 @@ class SplashScreen extends ConsumerStatefulWidget {
 }
 
 class _SplashScreenState extends ConsumerState<SplashScreen> {
-  bool _navigated = false;
-
   @override
   void initState() {
     super.initState();
-    _listenToAuthState();
-    _checkAuthAndNavigate();
+    _checkAuth();
   }
 
-  Future<void> _checkAuthAndNavigate() async {
-    await Future.delayed(const Duration(seconds: 2));
-
+  Future<void> _checkAuth() async {
+    await Future.delayed(const Duration(seconds: 1));
     if (!mounted) return;
-
     await ref.read(authStateProvider.notifier).checkAuthStatus();
-  }
-
-  void _listenToAuthState() {
-    ref.listen<AuthState>(authStateProvider, (previous, next) {
-      if (!mounted || _navigated) return;
-
-      if (next is AuthAuthenticated) {
-        _navigated = true;
-        context.go(AppRoutes.home);
-      } else if (next is AuthUnauthenticated || next is AuthError) {
-        _navigated = true;
-        context.go(AppRoutes.login);
-      }
-    });
+    // GoRouter redirect handles navigation from here
   }
 
   @override

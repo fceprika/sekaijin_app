@@ -51,7 +51,9 @@ class ErrorInterceptor extends Interceptor {
         );
 
       case 401:
-        return AuthException();
+        return AuthException(
+          message: _extractMessage(data) ?? 'Session expirée',
+        );
 
       case 403:
         return AuthException(message: 'Accès non autorisé');

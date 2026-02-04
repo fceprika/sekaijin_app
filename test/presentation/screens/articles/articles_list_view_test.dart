@@ -8,6 +8,7 @@ import 'package:sekaijin_app/domain/entities/country.dart';
 import 'package:sekaijin_app/domain/entities/user.dart';
 import 'package:sekaijin_app/domain/repositories/article_repository.dart';
 import 'package:sekaijin_app/presentation/providers/articles_provider.dart';
+import 'package:sekaijin_app/presentation/providers/paged_state.dart';
 import 'package:sekaijin_app/presentation/screens/news/articles_list_view.dart';
 
 void main() {
@@ -62,7 +63,7 @@ void main() {
   ];
 
   Widget createScreen({
-    ArticlesState? articlesState,
+    PagedState<Article>? articlesState,
     String? categoryFilter,
   }) {
     return ProviderScope(
@@ -70,7 +71,7 @@ void main() {
         articlesListProvider.overrideWith((ref) {
           final notifier = _MockArticlesNotifier(
             ref,
-            articlesState ?? const ArticlesState(),
+            articlesState ?? const PagedState<Article>(),
           );
           return notifier;
         }),
@@ -86,7 +87,7 @@ void main() {
   group('ArticlesListView', () {
     testWidgets('renders with screen key', (tester) async {
       await tester.pumpWidget(createScreen(
-        articlesState: ArticlesState(articles: mockArticles, total: 2),
+        articlesState: PagedState<Article>(items: mockArticles, total: 2),
       ));
       await tester.pump();
 
@@ -95,7 +96,7 @@ void main() {
 
     testWidgets('displays category chips including Tous', (tester) async {
       await tester.pumpWidget(createScreen(
-        articlesState: ArticlesState(articles: mockArticles, total: 2),
+        articlesState: PagedState<Article>(items: mockArticles, total: 2),
       ));
       await tester.pump();
 
@@ -105,7 +106,7 @@ void main() {
 
     testWidgets('displays temoignage category chip', (tester) async {
       await tester.pumpWidget(createScreen(
-        articlesState: ArticlesState(articles: mockArticles, total: 2),
+        articlesState: PagedState<Article>(items: mockArticles, total: 2),
       ));
       await tester.pump();
 
@@ -114,7 +115,7 @@ void main() {
 
     testWidgets('displays guide-pratique category chip', (tester) async {
       await tester.pumpWidget(createScreen(
-        articlesState: ArticlesState(articles: mockArticles, total: 2),
+        articlesState: PagedState<Article>(items: mockArticles, total: 2),
       ));
       await tester.pump();
 
@@ -123,7 +124,7 @@ void main() {
 
     testWidgets('displays travail category chip', (tester) async {
       await tester.pumpWidget(createScreen(
-        articlesState: ArticlesState(articles: mockArticles, total: 2),
+        articlesState: PagedState<Article>(items: mockArticles, total: 2),
       ));
       await tester.pump();
 
@@ -132,7 +133,7 @@ void main() {
 
     testWidgets('displays lifestyle category chip', (tester) async {
       await tester.pumpWidget(createScreen(
-        articlesState: ArticlesState(articles: mockArticles, total: 2),
+        articlesState: PagedState<Article>(items: mockArticles, total: 2),
       ));
       await tester.pump();
 
@@ -141,7 +142,7 @@ void main() {
 
     testWidgets('displays cuisine category chip', (tester) async {
       await tester.pumpWidget(createScreen(
-        articlesState: ArticlesState(articles: mockArticles, total: 2),
+        articlesState: PagedState<Article>(items: mockArticles, total: 2),
       ));
       await tester.pump();
 
@@ -150,7 +151,7 @@ void main() {
 
     testWidgets('displays article cards with correct keys', (tester) async {
       await tester.pumpWidget(createScreen(
-        articlesState: ArticlesState(articles: mockArticles, total: 2),
+        articlesState: PagedState<Article>(items: mockArticles, total: 2),
       ));
       await tester.pump();
 
@@ -159,7 +160,7 @@ void main() {
 
     testWidgets('displays first article title', (tester) async {
       await tester.pumpWidget(createScreen(
-        articlesState: ArticlesState(articles: mockArticles, total: 2),
+        articlesState: PagedState<Article>(items: mockArticles, total: 2),
       ));
       await tester.pump();
 
@@ -168,7 +169,7 @@ void main() {
 
     testWidgets('displays empty state when no articles', (tester) async {
       await tester.pumpWidget(createScreen(
-        articlesState: const ArticlesState(articles: [], total: 0),
+        articlesState: const PagedState<Article>(items: [], total: 0),
       ));
       await tester.pump();
 
@@ -177,7 +178,7 @@ void main() {
 
     testWidgets('shows loading shimmer when loading', (tester) async {
       await tester.pumpWidget(createScreen(
-        articlesState: const ArticlesState(isLoading: true),
+        articlesState: const PagedState<Article>(isLoading: true),
       ));
       await tester.pump();
 
@@ -187,7 +188,7 @@ void main() {
 
     testWidgets('has RefreshIndicator for pull-to-refresh', (tester) async {
       await tester.pumpWidget(createScreen(
-        articlesState: ArticlesState(articles: mockArticles, total: 2),
+        articlesState: PagedState<Article>(items: mockArticles, total: 2),
       ));
       await tester.pump();
 
@@ -197,16 +198,16 @@ void main() {
 }
 
 class _MockArticlesNotifier extends ArticlesNotifier {
-  final ArticlesState _mockState;
+  final PagedState<Article> _mockState;
 
   _MockArticlesNotifier(Ref ref, this._mockState)
       : super(_MockArticleRepository(), ref);
 
   @override
-  ArticlesState get state => _mockState;
+  PagedState<Article> get state => _mockState;
 
   @override
-  Future<void> loadArticles() async {}
+  Future<void> loadInitial() async {}
 
   @override
   Future<void> loadMore() async {}

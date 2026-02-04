@@ -10,6 +10,7 @@ import 'package:sekaijin_app/domain/repositories/auth_repository.dart';
 import 'package:sekaijin_app/domain/repositories/place_repository.dart';
 import 'package:sekaijin_app/presentation/providers/auth_provider.dart';
 import 'package:sekaijin_app/presentation/providers/places_provider.dart';
+import 'package:sekaijin_app/services/auth_service.dart';
 import 'package:sekaijin_app/presentation/providers/profile_provider.dart';
 import 'package:sekaijin_app/presentation/screens/profile/my_places_list_screen.dart';
 
@@ -73,7 +74,7 @@ void main() {
     return ProviderScope(
       overrides: [
         authStateProvider.overrideWith((ref) {
-          final notifier = AuthNotifier(mockAuthRepository);
+          final notifier = AuthNotifier(mockAuthRepository, AuthService());
           notifier.setAuthenticated(mockUser);
           return notifier;
         }),

@@ -6,6 +6,7 @@ import 'package:sekaijin_app/domain/entities/user.dart';
 import 'package:sekaijin_app/domain/repositories/auth_repository.dart';
 import 'package:sekaijin_app/presentation/providers/auth_provider.dart';
 import 'package:sekaijin_app/presentation/providers/home_provider.dart';
+import 'package:sekaijin_app/services/auth_service.dart';
 import 'package:sekaijin_app/presentation/screens/home/home_screen.dart';
 import 'package:sekaijin_app/presentation/widgets/cards/news_card.dart';
 import 'package:sekaijin_app/presentation/widgets/cards/place_card.dart';
@@ -236,7 +237,7 @@ void main() {
 class _MockAuthNotifier extends AuthNotifier {
   final AuthState _initialState;
 
-  _MockAuthNotifier(this._initialState) : super(_MockAuthRepository());
+  _MockAuthNotifier(this._initialState) : super(_MockAuthRepository(), AuthService());
 
   @override
   AuthState get state => _initialState;

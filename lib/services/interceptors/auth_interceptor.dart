@@ -22,7 +22,11 @@ class AuthInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401) {
-      await _authService.clearAll();
+      final path = err.requestOptions.path;
+      // Don't clear auth on login/register attempts
+      if (!path.contains('/login') && !path.contains('/register')) {
+        await _authService.clearAll();
+      }
     }
     handler.next(err);
   }

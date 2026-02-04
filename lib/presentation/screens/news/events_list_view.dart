@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/config/theme.dart';
 import '../../../domain/entities/event.dart';
 import '../../providers/events_provider.dart';
+import '../../providers/paged_state.dart';
 import '../../widgets/cards/event_list_card.dart';
 import '../../widgets/common/empty_state.dart';
 import '../../widgets/common/error_state.dart';
@@ -105,7 +106,7 @@ class EventsListView extends ConsumerWidget {
   Widget _buildEventsList(
     BuildContext context,
     WidgetRef ref,
-    EventsState state,
+    PagedState<Event> state,
   ) {
     if (state.isLoading && state.items.isEmpty) {
       return _buildLoadingShimmer();
