@@ -37,7 +37,7 @@ class BottomNavBar extends StatelessWidget {
           onTap: onTap,
           type: BottomNavigationBarType.fixed,
           selectedItemColor: scheme.primary,
-          unselectedItemColor: scheme.onSurfaceVariant,
+          unselectedItemColor: scheme.onSurfaceVariant.withValues(alpha: 0.75),
           showUnselectedLabels: true,
           backgroundColor: Colors.transparent,
           items: [
@@ -78,7 +78,7 @@ class BottomNavBar extends StatelessWidget {
   }
 
   Widget _buildAddIcon(ColorScheme scheme, {required bool isActive}) {
-    final backgroundColor = isActive ? scheme.primary : scheme.secondary;
+    final backgroundColor = isActive ? AppColors.lagoon700 : scheme.secondary;
     return Container(
       width: 44,
       height: 44,
@@ -95,8 +95,8 @@ class BottomNavBar extends StatelessWidget {
       ),
       child: Icon(
         Icons.add,
-        size: 24,
-        color: scheme.onPrimary,
+        size: 32,
+        color: scheme.onSecondary,
       ),
     );
   }

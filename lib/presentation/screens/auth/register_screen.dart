@@ -256,7 +256,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                               : (value) {
                                   setState(() => _acceptTerms = value ?? false);
                                 },
-                          activeColor: AppColors.primary,
+                          activeColor: scheme.secondary,
                         ),
                         Expanded(
                           child: GestureDetector(
@@ -272,20 +272,20 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                   style: textTheme.bodySmall?.copyWith(
                                     color: scheme.onSurfaceVariant,
                                   ),
-                                  children: const [
-                                    TextSpan(text: 'J\'accepte les '),
+                                  children: [
+                                    const TextSpan(text: 'J\'accepte les '),
                                     TextSpan(
                                       text: 'conditions d\'utilisation',
                                       style: TextStyle(
-                                        color: AppColors.primary,
+                                        color: scheme.secondary,
                                         decoration: TextDecoration.underline,
                                       ),
                                     ),
-                                    TextSpan(text: ' et la '),
+                                    const TextSpan(text: ' et la '),
                                     TextSpan(
                                       text: 'politique de confidentialité',
                                       style: TextStyle(
-                                        color: AppColors.primary,
+                                        color: scheme.secondary,
                                         decoration: TextDecoration.underline,
                                       ),
                                     ),

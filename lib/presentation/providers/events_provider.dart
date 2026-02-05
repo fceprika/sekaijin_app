@@ -24,12 +24,11 @@ final eventRepositoryProvider = Provider<EventRepository>((ref) {
 
 // Events notifier
 class EventsNotifier extends PagedNotifier<Event> {
-  final EventRepository _repository;
   final Ref _ref;
 
-  EventsNotifier(this._repository, this._ref)
+  EventsNotifier(EventRepository repository, this._ref)
       : super(
-          (page) => _repository.getEvents(
+          (page) => repository.getEvents(
             isOnline: _ref.read(eventOnlineFilterProvider),
             upcoming: _ref.read(eventUpcomingFilterProvider),
             page: page,

@@ -27,6 +27,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(gradient: AppGradients.hero),
@@ -43,7 +45,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                   borderRadius: BorderRadius.circular(32),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primary.withValues(alpha: 0.25),
+                      color: scheme.secondary.withValues(alpha: 0.22),
                       blurRadius: 18,
                       offset: const Offset(0, 10),
                     ),
@@ -60,13 +62,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                 'Sekaijin',
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                       fontWeight: FontWeight.w700,
-                      color: AppColors.tertiary,
+                      color: scheme.onSurface,
                     ),
               ),
               const SizedBox(height: 48),
-              const CircularProgressIndicator(
-                color: AppColors.primary,
-              ),
+              CircularProgressIndicator(color: scheme.secondary),
             ],
           ),
         ),

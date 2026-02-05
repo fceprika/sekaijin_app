@@ -36,10 +36,9 @@ final placeReviewsProvider =
 final userReviewProvider =
     Provider.family<PlaceReview?, String>((ref, placeSlug) {
   final authState = ref.watch(authStateProvider);
-  final reviewsAsync = ref.watch(placeReviewsProvider(placeSlug));
-
   if (authState is! AuthAuthenticated) return null;
 
+  final reviewsAsync = ref.watch(placeReviewsProvider(placeSlug));
   final currentUserId = authState.user.id;
 
   return reviewsAsync.whenOrNull(

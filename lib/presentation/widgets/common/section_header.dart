@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/config/theme.dart';
-
 class SectionHeader extends StatelessWidget {
   final String title;
   final VoidCallback? onSeeAll;
@@ -27,7 +25,7 @@ class SectionHeader extends StatelessWidget {
                 width: 18,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: scheme.primary,
+                  color: scheme.secondary,
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
@@ -37,7 +35,7 @@ class SectionHeader extends StatelessWidget {
                   title,
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w700,
-                    color: scheme.onBackground,
+                    color: scheme.onSurface,
                   ),
                 ),
               ),
@@ -50,12 +48,12 @@ class SectionHeader extends StatelessWidget {
             icon: Icon(
               Icons.arrow_forward,
               size: 16,
-              color: scheme.primary,
+              color: scheme.secondary,
             ),
             label: Text(
               'Voir tout',
               style: TextStyle(
-                color: scheme.primary,
+                color: scheme.secondary,
                 fontWeight: FontWeight.w600,
               ),
             ),

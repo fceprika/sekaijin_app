@@ -23,12 +23,11 @@ final articleRepositoryProvider = Provider<ArticleRepository>((ref) {
 
 // Articles notifier
 class ArticlesNotifier extends PagedNotifier<Article> {
-  final ArticleRepository _repository;
   final Ref _ref;
 
-  ArticlesNotifier(this._repository, this._ref)
+  ArticlesNotifier(ArticleRepository repository, this._ref)
       : super(
-          (page) => _repository.getArticles(
+          (page) => repository.getArticles(
             category: _ref.read(articleCategoryFilterProvider),
             page: page,
           ),

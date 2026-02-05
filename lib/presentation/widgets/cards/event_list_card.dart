@@ -23,17 +23,17 @@ class EventListCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
-      child: Opacity(
-        opacity: event.isPast ? 0.6 : 1.0,
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: AppColors.outline),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.shadow,
+        child: Opacity(
+          opacity: event.isPast ? 0.6 : 1.0,
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 16),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: AppColors.outline),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.shadow,
                 blurRadius: 18,
                 offset: const Offset(0, 8),
               ),
@@ -149,8 +149,8 @@ class EventListCard extends StatelessWidget {
         gradient: event.isPast ? null : AppGradients.accent,
         color: event.isPast ? AppColors.surfaceVariant : null,
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          bottomLeft: Radius.circular(20),
+          topLeft: Radius.circular(24),
+          bottomLeft: Radius.circular(24),
         ),
       ),
       child: Column(

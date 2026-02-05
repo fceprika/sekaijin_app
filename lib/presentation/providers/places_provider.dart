@@ -26,12 +26,11 @@ final placeRepositoryProvider = Provider<PlaceRepository>((ref) {
 
 // Places notifier
 class PlacesNotifier extends PagedNotifier<Place> {
-  final PlaceRepository _repository;
   final Ref _ref;
 
-  PlacesNotifier(this._repository, this._ref)
+  PlacesNotifier(PlaceRepository repository, this._ref)
       : super(
-          (page) => _repository.getPlaces(
+          (page) => repository.getPlaces(
             category: _ref.read(placeCategoryFilterProvider),
             cityId: _ref.read(placeCityFilterProvider),
             sortBy: _ref.read(placeSortProvider),

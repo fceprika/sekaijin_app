@@ -47,6 +47,13 @@ class HomeScreen extends ConsumerWidget {
                     gradient: AppGradients.hero,
                     borderRadius: BorderRadius.circular(24),
                     border: Border.all(color: AppColors.outline),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.shadow,
+                        blurRadius: 20,
+                        offset: const Offset(0, 12),
+                      ),
+                    ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,14 +157,15 @@ class _WelcomeSection extends StatelessWidget {
         Container(
           width: 56,
           height: 56,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
+            color: AppColors.lagoon100,
             shape: BoxShape.circle,
-            gradient: AppGradients.accent,
+            border: Border.all(color: AppColors.lagoon200),
           ),
           child: Icon(
             Icons.travel_explore,
             size: 26,
-            color: scheme.onPrimary,
+            color: scheme.secondary,
           ),
         ),
       ],

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/config/theme.dart';
 import '../../../domain/entities/place.dart';
 import '../../providers/places_provider.dart';
 
@@ -11,6 +10,7 @@ class CategoryChips extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedCategory = ref.watch(placeCategoryFilterProvider);
+    final scheme = Theme.of(context).colorScheme;
 
     return SizedBox(
       height: 44,
@@ -28,12 +28,12 @@ class CategoryChips extends ConsumerWidget {
               onSelected: (_) {
                 ref.read(placeCategoryFilterProvider.notifier).state = null;
               },
-              selectedColor: AppColors.primary.withValues(alpha: 0.2),
-              checkmarkColor: AppColors.primary,
+              selectedColor: scheme.secondary.withValues(alpha: 0.14),
+              checkmarkColor: scheme.secondary,
               labelStyle: TextStyle(
                 color: selectedCategory == null
-                    ? AppColors.primary
-                    : AppColors.onBackground,
+                    ? scheme.secondary
+                    : scheme.onSurface,
                 fontWeight: selectedCategory == null
                     ? FontWeight.bold
                     : FontWeight.normal,
@@ -53,10 +53,10 @@ class CategoryChips extends ConsumerWidget {
                   ref.read(placeCategoryFilterProvider.notifier).state =
                       isSelected ? null : category;
                 },
-                selectedColor: AppColors.primary.withValues(alpha: 0.2),
-                checkmarkColor: AppColors.primary,
+                selectedColor: scheme.secondary.withValues(alpha: 0.14),
+                checkmarkColor: scheme.secondary,
                 labelStyle: TextStyle(
-                  color: isSelected ? AppColors.primary : AppColors.onBackground,
+                  color: isSelected ? scheme.secondary : scheme.onSurface,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 ),
               ),

@@ -29,16 +29,18 @@ class _ImageCarouselState extends State<ImageCarousel> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     if (widget.imageUrls.isEmpty) {
       return SizedBox(
         height: widget.height,
         child: Container(
-          color: AppColors.primary.withValues(alpha: 0.1),
-          child: const Center(
+          color: AppColors.mist100,
+          child: Center(
             child: Icon(
               Icons.place,
               size: 64,
-              color: AppColors.primary,
+              color: scheme.secondary,
             ),
           ),
         ),
@@ -68,12 +70,12 @@ class _ImageCarouselState extends State<ImageCarousel> {
                   ),
                 ),
                 errorWidget: (context, url, error) => Container(
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  child: const Center(
+                  color: AppColors.mist100,
+                  child: Center(
                     child: Icon(
                       Icons.broken_image,
                       size: 48,
-                      color: AppColors.primary,
+                      color: scheme.secondary,
                     ),
                   ),
                 ),
@@ -96,7 +98,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
                     height: 8,
                     decoration: BoxDecoration(
                       color: _currentIndex == index
-                          ? AppColors.primary
+                          ? scheme.secondary
                           : Colors.white.withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(4),
                     ),

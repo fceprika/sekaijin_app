@@ -25,7 +25,7 @@ class ReviewCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(
           color: AppColors.outline,
         ),
@@ -39,13 +39,13 @@ class ReviewCard extends StatelessWidget {
               if (showUser) ...[
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor: scheme.primary.withValues(alpha: 0.12),
+                  backgroundColor: scheme.secondary.withValues(alpha: 0.12),
                   child: Text(
                     review.user?.name.isNotEmpty == true
                         ? review.user!.name[0].toUpperCase()
                         : '?',
                     style: textTheme.labelLarge?.copyWith(
-                      color: scheme.primary,
+                      color: scheme.secondary,
                       fontWeight: FontWeight.w700,
                     ),
                   ),

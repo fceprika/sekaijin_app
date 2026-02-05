@@ -90,7 +90,7 @@ class ProfileScreen extends ConsumerWidget {
                     const CircleAvatar(
                       key: Key('profile_avatar'),
                       radius: 48,
-                      backgroundColor: AppColors.primary,
+                      backgroundColor: AppColors.secondary,
                       child: Icon(
                         Icons.person,
                         size: 48,

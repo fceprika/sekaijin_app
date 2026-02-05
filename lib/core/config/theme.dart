@@ -2,38 +2,97 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
-  static const Color primary = Color(0xFFD96B4C);
-  static const Color secondary = Color(0xFF2F7C73);
-  static const Color tertiary = Color(0xFF263248);
-  static const Color background = Color(0xFFF7F2EC);
+  // Ink (text + primary UI)
+  static const Color ink50 = Color(0xFFF3F6F9);
+  static const Color ink100 = Color(0xFFE5EBF1);
+  static const Color ink200 = Color(0xFFCFD9E4);
+  static const Color ink300 = Color(0xFFAAB9C8);
+  static const Color ink400 = Color(0xFF7D91A5);
+  static const Color ink500 = Color(0xFF556A83);
+  static const Color ink600 = Color(0xFF3E5167);
+  static const Color ink700 = Color(0xFF2B3A4D);
+  static const Color ink800 = Color(0xFF1C2736);
+  static const Color ink900 = Color(0xFF0B1B2B);
+  static const Color ink950 = Color(0xFF07111C);
+
+  // Lagoon (brand accent)
+  static const Color lagoon50 = Color(0xFFEFFAF8);
+  static const Color lagoon100 = Color(0xFFD8F3EE);
+  static const Color lagoon200 = Color(0xFFB0E7DD);
+  static const Color lagoon300 = Color(0xFF7CD4C7);
+  static const Color lagoon400 = Color(0xFF42B7AA);
+  static const Color lagoon500 = Color(0xFF1A948C);
+  static const Color lagoon600 = Color(0xFF0F766E);
+  static const Color lagoon700 = Color(0xFF0B5B54);
+  static const Color lagoon800 = Color(0xFF0B4943);
+  static const Color lagoon900 = Color(0xFF083531);
+
+  // Sand (warm backgrounds)
+  static const Color sand50 = Color(0xFFFBF8F3);
+  static const Color sand100 = Color(0xFFF6F2EA);
+  static const Color sand200 = Color(0xFFEFE6D8);
+  static const Color sand300 = Color(0xFFE0D1B8);
+  static const Color sand400 = Color(0xFFCEB58F);
+  static const Color sand500 = Color(0xFFB9935F);
+  static const Color sand600 = Color(0xFF9B7446);
+  static const Color sand700 = Color(0xFF7C5A36);
+  static const Color sand800 = Color(0xFF5F4429);
+  static const Color sand900 = Color(0xFF3B2B1A);
+
+  // Mist (cool neutral for cards/lines)
+  static const Color mist50 = Color(0xFFF8FAFC);
+  static const Color mist100 = Color(0xFFEEF2F6);
+  static const Color mist200 = Color(0xFFE2E8F0);
+  static const Color mist300 = Color(0xFFCDD5E1);
+  static const Color mist400 = Color(0xFFA3AFC2);
+  static const Color mist500 = Color(0xFF7B8BA3);
+  static const Color mist600 = Color(0xFF5F6F87);
+
+  // Copper (warm accent / warning)
+  static const Color copper50 = Color(0xFFFFF3EC);
+  static const Color copper100 = Color(0xFFFFE5D5);
+  static const Color copper200 = Color(0xFFFFC9AA);
+  static const Color copper300 = Color(0xFFFF9F70);
+  static const Color copper400 = Color(0xFFF0703B);
+  static const Color copper500 = Color(0xFFC2410C);
+  static const Color copper600 = Color(0xFF9A3412);
+  static const Color copper700 = Color(0xFF7C2D12);
+  static const Color copper800 = Color(0xFF6C2A12);
+  static const Color copper900 = Color(0xFF4C1D12);
+
+  // App tokens
+  static const Color primary = ink900; // Ink CTA
+  static const Color secondary = lagoon600; // Lagoon accent
+  static const Color tertiary = ink800;
+  static const Color background = sand50;
   static const Color surface = Color(0xFFFFFFFF);
-  static const Color surfaceAlt = Color(0xFFFBF7F1);
-  static const Color surfaceVariant = Color(0xFFF1E7DC);
-  static const Color outline = Color(0xFFE2D5C6);
+  static const Color surfaceAlt = mist50;
+  static const Color surfaceVariant = mist100;
+  static const Color outline = ink100;
   static const Color onPrimary = Color(0xFFFFFFFF);
   static const Color onSecondary = Color(0xFFFFFFFF);
   static const Color onTertiary = Color(0xFFFFFFFF);
-  static const Color onBackground = Color(0xFF1C1A16);
-  static const Color onSurface = Color(0xFF1C1A16);
-  static const Color onSurfaceVariant = Color(0xFF5C5147);
-  static const Color error = Color(0xFFB42318);
+  static const Color onBackground = ink900;
+  static const Color onSurface = ink900;
+  static const Color onSurfaceVariant = ink600;
+  static const Color error = copper600;
   static const Color onError = Color(0xFFFFFFFF);
   static const Color rating = Color(0xFFF2B84B);
-  static const Color success = Color(0xFF1F8A70);
-  static const Color warning = Color(0xFFF2B84B);
-  static const Color info = Color(0xFF3B5B8A);
-  static const Color shadow = Color(0x1A1C1A16);
+  static const Color success = lagoon600;
+  static const Color warning = copper500;
+  static const Color info = ink600;
+  static const Color shadow = Color(0x1207111C);
 }
 
 class AppGradients {
   static const LinearGradient hero = LinearGradient(
-    colors: [Color(0xFFFFF3E8), Color(0xFFF7F2EC)],
+    colors: [AppColors.sand50, AppColors.mist50],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static const LinearGradient accent = LinearGradient(
-    colors: [Color(0xFFF7C59F), Color(0xFFD96B4C)],
+    colors: [AppColors.lagoon200, AppColors.lagoon600],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -42,7 +101,7 @@ class AppGradients {
 class AppTheme {
   static ThemeData get lightTheme {
     final baseScheme = ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
+      seedColor: AppColors.secondary,
       brightness: Brightness.light,
     );
     final colorScheme = baseScheme.copyWith(
@@ -52,19 +111,17 @@ class AppTheme {
       onSecondary: AppColors.onSecondary,
       tertiary: AppColors.tertiary,
       onTertiary: AppColors.onTertiary,
-      background: AppColors.background,
-      onBackground: AppColors.onBackground,
       surface: AppColors.surface,
       onSurface: AppColors.onSurface,
-      surfaceVariant: AppColors.surfaceVariant,
+      surfaceContainerHighest: AppColors.surfaceVariant,
       onSurfaceVariant: AppColors.onSurfaceVariant,
       outline: AppColors.outline,
       error: AppColors.error,
       onError: AppColors.onError,
     );
 
-    final baseText = GoogleFonts.manropeTextTheme();
-    final displayText = GoogleFonts.frauncesTextTheme();
+    final baseText = GoogleFonts.sourceSans3TextTheme();
+    final displayText = GoogleFonts.newsreaderTextTheme();
     final textTheme = baseText
         .copyWith(
           displayLarge: displayText.displayLarge?.copyWith(
@@ -99,9 +156,9 @@ class AppTheme {
           titleSmall: displayText.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
           ),
-          bodyLarge: baseText.bodyLarge?.copyWith(height: 1.4),
-          bodyMedium: baseText.bodyMedium?.copyWith(height: 1.4),
-          bodySmall: baseText.bodySmall?.copyWith(height: 1.4),
+          bodyLarge: baseText.bodyLarge?.copyWith(height: 1.35),
+          bodyMedium: baseText.bodyMedium?.copyWith(height: 1.35),
+          bodySmall: baseText.bodySmall?.copyWith(height: 1.35),
           labelLarge: baseText.labelLarge?.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -113,8 +170,8 @@ class AppTheme {
           ),
         )
         .apply(
-          bodyColor: AppColors.onBackground,
-          displayColor: AppColors.onBackground,
+          bodyColor: AppColors.ink700,
+          displayColor: AppColors.ink900,
         );
 
     return ThemeData(
@@ -138,7 +195,7 @@ class AppTheme {
         surfaceTintColor: Colors.transparent,
         shadowColor: AppColors.shadow,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(24),
           side: const BorderSide(color: AppColors.outline),
         ),
       ),
@@ -147,19 +204,19 @@ class AppTheme {
         fillColor: AppColors.surface,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           borderSide: const BorderSide(color: AppColors.outline),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           borderSide: const BorderSide(color: AppColors.outline),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          borderRadius: BorderRadius.circular(18),
+          borderSide: const BorderSide(color: AppColors.secondary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           borderSide: const BorderSide(color: AppColors.error),
         ),
         hintStyle: TextStyle(color: AppColors.onSurfaceVariant),
@@ -177,7 +234,7 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.onBackground,
-          side: const BorderSide(color: AppColors.outline, width: 1.2),
+          side: const BorderSide(color: AppColors.ink300, width: 1.2),
           shape: const StadiumBorder(),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           textStyle: textTheme.labelLarge,
@@ -185,7 +242,7 @@ class AppTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.primary,
+          foregroundColor: AppColors.secondary,
           textStyle: textTheme.labelLarge,
         ),
       ),
@@ -201,7 +258,7 @@ class AppTheme {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       ),
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: AppColors.tertiary,
+        backgroundColor: AppColors.ink900,
         contentTextStyle: textTheme.bodyMedium?.copyWith(color: Colors.white),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
@@ -209,14 +266,14 @@ class AppTheme {
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppColors.surface,
         selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.onSurfaceVariant,
+        unselectedItemColor: AppColors.ink500,
         type: BottomNavigationBarType.fixed,
         elevation: 0,
         showUnselectedLabels: true,
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.onPrimary,
+        backgroundColor: AppColors.secondary,
+        foregroundColor: AppColors.onSecondary,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
       dividerTheme: const DividerThemeData(
@@ -227,7 +284,7 @@ class AppTheme {
       listTileTheme: ListTileThemeData(
         iconColor: AppColors.onSurfaceVariant,
         textColor: AppColors.onSurface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       ),
     );
   }

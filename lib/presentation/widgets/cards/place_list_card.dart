@@ -24,7 +24,7 @@ class PlaceListCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(24),
           border: Border.all(color: AppColors.outline),
           boxShadow: [
             BoxShadow(
@@ -39,7 +39,7 @@ class PlaceListCard extends StatelessWidget {
           children: [
             // Image
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
               child: AspectRatio(
                 aspectRatio: 16 / 9,
                 child: place.imageUrls.isNotEmpty
@@ -67,14 +67,14 @@ class PlaceListCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: scheme.primary.withValues(alpha: 0.12),
+                      color: scheme.secondary.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
                       '${place.category.emoji} ${place.category.label}',
                       style: textTheme.labelSmall?.copyWith(
                         fontWeight: FontWeight.w700,
-                        color: scheme.primary,
+                        color: scheme.secondary,
                       ),
                     ),
                   ),

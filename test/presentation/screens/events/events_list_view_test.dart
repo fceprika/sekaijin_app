@@ -173,7 +173,7 @@ void main() {
       ));
       await tester.pump();
 
-      expect(find.text('Aucun événement à venir'), findsOneWidget);
+      expect(find.text('Aucun événement'), findsOneWidget);
     });
 
     testWidgets('has RefreshIndicator for pull-to-refresh', (tester) async {

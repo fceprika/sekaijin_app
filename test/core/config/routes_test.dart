@@ -36,7 +36,7 @@ void main() {
     });
 
     test('placeDetails route has id parameter', () {
-      expect(AppRoutes.placeDetails, '/place/:id');
+      expect(AppRoutes.placeDetails, '/places/:slug');
     });
   });
 }

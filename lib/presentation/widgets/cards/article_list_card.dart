@@ -24,7 +24,7 @@ class ArticleListCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(24),
           border: Border.all(color: AppColors.outline),
           boxShadow: [
             BoxShadow(
@@ -39,7 +39,7 @@ class ArticleListCard extends StatelessWidget {
           children: [
             // Image
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
               child: AspectRatio(
                 aspectRatio: 16 / 9,
                 child: article.fullImageUrl != null
@@ -69,14 +69,14 @@ class ArticleListCard extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: scheme.primary.withValues(alpha: 0.12),
+                          color: scheme.secondary.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
                           article.categoryLabel,
                           style: textTheme.labelSmall?.copyWith(
                             fontWeight: FontWeight.w700,
-                            color: scheme.primary,
+                            color: scheme.secondary,
                           ),
                         ),
                       ),
@@ -118,7 +118,7 @@ class ArticleListCard extends StatelessWidget {
                       if (article.author != null) ...[
                         CircleAvatar(
                           radius: 12,
-                          backgroundColor: scheme.primary.withValues(alpha: 0.12),
+                          backgroundColor: scheme.secondary.withValues(alpha: 0.12),
                           backgroundImage: article.author!.fullAvatarUrl != null
                               ? NetworkImage(article.author!.fullAvatarUrl!)
                               : null,
@@ -127,7 +127,7 @@ class ArticleListCard extends StatelessWidget {
                                   article.author!.displayName[0].toUpperCase(),
                                   style: textTheme.labelSmall?.copyWith(
                                     fontWeight: FontWeight.w700,
-                                    color: scheme.primary,
+                                    color: scheme.secondary,
                                   ),
                                 )
                               : null,

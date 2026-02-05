@@ -44,6 +44,7 @@ class EventsListView extends ConsumerWidget {
       child: Row(
         children: [
           _buildFilterChip(
+            context: context,
             key: 'event_filter_all',
             label: 'Tous',
             isSelected: onlineFilter == null,
@@ -53,6 +54,7 @@ class EventsListView extends ConsumerWidget {
           ),
           const SizedBox(width: 8),
           _buildFilterChip(
+            context: context,
             key: 'event_filter_online',
             label: 'En ligne',
             isSelected: onlineFilter == true,
@@ -62,6 +64,7 @@ class EventsListView extends ConsumerWidget {
           ),
           const SizedBox(width: 8),
           _buildFilterChip(
+            context: context,
             key: 'event_filter_presentiel',
             label: 'Présentiel',
             isSelected: onlineFilter == false,
@@ -75,28 +78,32 @@ class EventsListView extends ConsumerWidget {
   }
 
   Widget _buildFilterChip({
+    required BuildContext context,
     required String key,
     required String label,
     required bool isSelected,
     required VoidCallback onTap,
   }) {
+    final scheme = Theme.of(context).colorScheme;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         key: Key(key),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected
-              ? AppColors.primary
-              : AppColors.primary.withValues(alpha: 0.1),
+          color: isSelected ? AppColors.lagoon50 : scheme.surface,
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected ? scheme.secondary : scheme.outline,
+          ),
         ),
         child: Text(
           label,
           style: TextStyle(
             fontSize: 14,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            color: isSelected ? AppColors.onPrimary : AppColors.primary,
+            color: isSelected ? scheme.secondary : scheme.onSurface,
           ),
         ),
       ),

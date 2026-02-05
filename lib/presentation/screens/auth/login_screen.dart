@@ -226,6 +226,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Widget _buildLogo() {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Column(
       children: [
         Container(
@@ -236,7 +239,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withValues(alpha: 0.25),
+                color: scheme.secondary.withValues(alpha: 0.22),
                 blurRadius: 16,
                 offset: const Offset(0, 8),
               ),
@@ -251,10 +254,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         const SizedBox(height: 16),
         Text(
           'Sekaijin',
-          style: TextStyle(
-            fontSize: 28,
+          style: textTheme.headlineSmall?.copyWith(
             fontWeight: FontWeight.w700,
-            color: AppColors.tertiary,
+            color: scheme.onSurface,
           ),
         ),
       ],

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/config/theme.dart';
 import '../../../domain/entities/article.dart';
 import '../../providers/articles_provider.dart';
 import '../../providers/paged_state.dart';
@@ -39,6 +38,7 @@ class ArticlesListView extends ConsumerWidget {
     WidgetRef ref,
     String? selectedCategory,
   ) {
+    final scheme = Theme.of(context).colorScheme;
     final categories = [
       (null, 'Tous'),
       ('temoignage', 'Témoignage'),
@@ -70,10 +70,10 @@ class ArticlesListView extends ConsumerWidget {
                   ref.read(articleCategoryFilterProvider.notifier).state =
                       category.$1;
                 },
-                selectedColor: AppColors.primary.withValues(alpha: 0.2),
-                checkmarkColor: AppColors.primary,
+                selectedColor: scheme.secondary.withValues(alpha: 0.14),
+                checkmarkColor: scheme.secondary,
                 labelStyle: TextStyle(
-                  color: isSelected ? AppColors.primary : AppColors.onBackground,
+                  color: isSelected ? scheme.secondary : scheme.onSurface,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 ),
               ),

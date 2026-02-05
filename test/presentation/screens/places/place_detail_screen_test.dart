@@ -3,11 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sekaijin_app/core/errors/failures.dart';
 import 'package:sekaijin_app/domain/entities/place.dart';
 import 'package:sekaijin_app/domain/entities/place_review.dart';
 import 'package:sekaijin_app/domain/entities/user.dart';
+import 'package:sekaijin_app/domain/repositories/auth_repository.dart';
+import 'package:sekaijin_app/presentation/providers/auth_provider.dart';
 import 'package:sekaijin_app/presentation/providers/place_detail_provider.dart';
 import 'package:sekaijin_app/presentation/screens/places/place_detail_screen.dart';
+import 'package:sekaijin_app/services/auth_service.dart';
+import 'package:shimmer/shimmer.dart';
 
 void main() {
   late Place mockPlace;
@@ -61,9 +66,20 @@ void main() {
     );
   });
 
-  Widget createScreen({Place? place, bool loading = false, String? error, Completer<Place>? loadingCompleter}) {
+  Widget createScreen({
+    Place? place,
+    AuthState? authState,
+    bool loading = false,
+    String? error,
+    Completer<Place>? loadingCompleter,
+  }) {
     return ProviderScope(
       overrides: [
+        if (authState != null)
+          authStateProvider.overrideWith((ref) {
+            final notifier = _MockAuthNotifier(authState);
+            return notifier;
+          }),
         placeDetailProvider('test-place').overrideWith((ref) {
           if (loading && loadingCompleter != null) {
             // Return a completer-based future for loading state that can be cancelled
@@ -96,11 +112,11 @@ void main() {
       await tester.pumpWidget(createScreen(loading: true, loadingCompleter: completer));
       await tester.pump();
 
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(Shimmer), findsOneWidget);
 
       // Complete the future to clean up the test
       completer.complete(mockPlace);
-      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
     });
 
     testWidgets('displays place title', (tester) async {
@@ -154,7 +170,9 @@ void main() {
     });
 
     testWidgets('displays add review button', (tester) async {
-      await tester.pumpWidget(createScreen());
+      await tester.pumpWidget(createScreen(
+        authState: AuthAuthenticated(mockPlace.user!),
+      ));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
 
@@ -200,4 +218,40 @@ void main() {
       expect(find.text('Ajouté par Test User'), findsOneWidget);
     });
   });
+}
+
+class _MockAuthNotifier extends AuthNotifier {
+  final AuthState _initialState;
+
+  _MockAuthNotifier(this._initialState) : super(_MockAuthRepository(), AuthService());
+
+  @override
+  AuthState get state => _initialState;
+}
+
+class _MockAuthRepository implements AuthRepository {
+  @override
+  Future<User?> getCurrentUser() async => null;
+
+  @override
+  Future<bool> isAuthenticated() async => false;
+
+  @override
+  Future<(Failure?, User?)> login(String email, String password) async =>
+      (null, null);
+
+  @override
+  Future<(Failure?, void)> logout() async => (null, null);
+
+  @override
+  Future<(Failure?, User?)> register({
+    required String name,
+    required String email,
+    required String password,
+    required String passwordConfirmation,
+    String? countryResidence,
+    String? interestCountry,
+    required bool terms,
+  }) async =>
+      (null, null);
 }

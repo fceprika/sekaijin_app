@@ -66,19 +66,18 @@ class _CountryButton extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? null : AppColors.surface,
-          gradient: isSelected ? AppGradients.accent : null,
-          borderRadius: BorderRadius.circular(16),
+          color: isSelected ? AppColors.lagoon50 : AppColors.surface,
+          borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.outline,
-            width: isSelected ? 1.5 : 1,
+            color: isSelected ? scheme.secondary : AppColors.outline,
+            width: isSelected ? 1.25 : 1,
           ),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.25),
-                    blurRadius: 12,
-                    offset: const Offset(0, 6),
+                    color: AppColors.shadow,
+                    blurRadius: 18,
+                    offset: const Offset(0, 10),
                   ),
                 ]
               : null,
@@ -96,7 +95,7 @@ class _CountryButton extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
-                color: isSelected ? AppColors.onPrimary : scheme.onSurface,
+                color: isSelected ? scheme.secondary : scheme.onSurface,
               ),
             ),
           ],

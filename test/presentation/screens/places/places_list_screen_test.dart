@@ -9,6 +9,7 @@ import 'package:sekaijin_app/domain/repositories/place_repository.dart';
 import 'package:sekaijin_app/presentation/providers/paged_state.dart';
 import 'package:sekaijin_app/presentation/providers/places_provider.dart';
 import 'package:sekaijin_app/presentation/screens/places/places_list_screen.dart';
+import 'package:sekaijin_app/presentation/widgets/common/loading_shimmer.dart';
 
 void main() {
   final mockPlaces = [
@@ -117,7 +118,7 @@ void main() {
       await tester.pump();
 
       expect(find.byKey(const Key('empty_places_state')), findsOneWidget);
-      expect(find.text('Aucun lieu trouvé'), findsOneWidget);
+      expect(find.text('Aucun lieu'), findsOneWidget);
     });
 
     testWidgets('displays place cards when places exist', (tester) async {
@@ -151,7 +152,7 @@ void main() {
       ));
       await tester.pump();
 
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(PlaceCardShimmer), findsWidgets);
     });
 
     testWidgets('has pull-to-refresh', (tester) async {

@@ -42,7 +42,7 @@ class PlaceCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(24),
           border: Border.all(color: AppColors.outline),
           boxShadow: [
             BoxShadow(
@@ -59,7 +59,7 @@ class PlaceCard extends StatelessWidget {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
                   child: Container(
                     height: 100,
                     width: double.infinity,
@@ -67,7 +67,7 @@ class PlaceCard extends StatelessWidget {
                     child: Icon(
                       Icons.place,
                       size: 40,
-                      color: scheme.primary,
+                      color: scheme.secondary,
                     ),
                   ),
                 ),
@@ -92,7 +92,7 @@ class PlaceCard extends StatelessWidget {
                     child: Icon(
                       data.categoryIcon,
                       size: 16,
-                      color: scheme.primary,
+                      color: scheme.secondary,
                     ),
                   ),
                 ),
